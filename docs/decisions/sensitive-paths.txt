@@ -1,0 +1,5 @@
+# Project-specific: architecturally sensitive paths, used by
+# scripts/check_adr_gate.py. This is a placeholder — replace with your
+# project's real directories. One path prefix per line, # for comments.
+TODO_replace_with_real_data_layer_path/
+TODO_replace_with_real_protocol_or_interface_path/

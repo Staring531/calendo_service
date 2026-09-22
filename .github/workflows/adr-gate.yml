@@ -1,0 +1,33 @@
+# 通用 workflow，假设本项目用 PR-based 工作流（改动先开 PR 再合并到 main）。
+# 如果实际是直接 push 到 main、没有 PR 这一步，这个 workflow 不会起作用，
+# 需要改成 pre-commit / pre-push hook。
+#
+# 使用前必须做的一件事：在仓库里放一个列出本项目架构敏感路径的文件
+# （比如 docs/decisions/sensitive-paths.txt），并把下面 --sensitive-paths-file
+# 的路径改成指向它——这个列表脚本本身不内置，因为它是项目专属信息。
+name: ADR gate
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  check-adr:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # 需要完整历史才能正确 diff base...head
+
+      - name: Save PR body
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: echo "$PR_BODY" > /tmp/pr_body.txt
+
+      - name: Check ADR gate
+        run: |
+          python3 scripts/check_adr_gate.py \
+            --base origin/${{ github.base_ref }} \
+            --head HEAD \
+            --sensitive-paths-file docs/decisions/sensitive-paths.txt \
+            --pr-body-file /tmp/pr_body.txt
