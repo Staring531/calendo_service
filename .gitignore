@@ -31,4 +31,3 @@ htmlcov/
 .env
 .env.*
 
-# uv.lock 建议提交进 git，不要忽略
