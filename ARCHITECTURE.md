@@ -14,13 +14,16 @@ for the source and protocol decision.
 - **Holiday source adapter**: Converts vacanza/holidays China records into
   stable ISO-date JSON records. See
   [ADR-0001](docs/decisions/2026-09-23-0001-china-holidays-mcp.md).
-- **MCP server**: Registers `china_public_holidays` and serves it over stdio.
+- **MCP server**: Registers `china_public_holidays` and serves it over stdio
+  or Streamable HTTP (`/mcp`).
   See [ADR-0001](docs/decisions/2026-09-23-0001-china-holidays-mcp.md).
 
 ## Deployment modes
 
-The current entry point serves MCP over stdio. The holiday data is packaged
-locally, so runtime access to a holiday API is not required.
+The `calendo` entry point serves MCP over stdio. The `calendo-http` entry point
+serves Streamable HTTP on `/mcp` by default and can optionally serve SSE. The
+holiday data is packaged locally, so runtime access to a holiday API is not
+required.
 
 ## What this document is not
 

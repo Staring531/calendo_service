@@ -25,6 +25,7 @@ dependencies = [
 
 [project.scripts]
 calendo = "calendo.server:main"
+calendo-http = "calendo.server:http_main"
 
 [project.optional-dependencies]
 dev = [

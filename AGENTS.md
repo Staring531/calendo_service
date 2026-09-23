@@ -91,6 +91,8 @@ Ordering below, from strongest to weakest evidence — see
 
 - [ADR-0001](docs/decisions/2026-09-23-0001-china-holidays-mcp.md) — 使用
   vacanza/holidays 和 Python MCP SDK 实现首个中国节假日工具。
+- [ADR-0002](docs/decisions/2026-09-23-0002-http-mcp-transport.md) — 增加
+  Streamable HTTP MCP 入口，并保留 SSE 兼容选项。
 
 ## CI mechanical checks currently in place
 

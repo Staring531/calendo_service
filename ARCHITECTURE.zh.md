@@ -9,11 +9,12 @@ calendo 是一个支持离线部署的 MCP 服务，向 AI agent 和 LLM 客户�
 ## 组成部分
 
 - **节假日数据源适配器**：将 vacanza/holidays 的中国日历记录转换为稳定的 ISO 日期 JSON 记录。见 [ADR-0001](docs/decisions/2026-09-23-0001-china-holidays-mcp.md)。
-- **MCP 服务**：注册 `china_public_holidays` 工具并通过 stdio 提供服务。见 [ADR-0001](docs/decisions/2026-09-23-0001-china-holidays-mcp.md)。
+- **MCP 服务**：注册 `china_public_holidays` 工具，并通过 stdio 或
+  Streamable HTTP（`/mcp`）提供服务。见 [ADR-0001](docs/decisions/2026-09-23-0001-china-holidays-mcp.md)。
 
 ## 部署模式
 
-当前入口通过 stdio 提供 MCP 服务。节假日数据随依赖本地安装，运行时不需要访问在线节假日 API。
+`calendo` 入口通过 stdio 提供 MCP 服务；`calendo-http` 入口默认在 `/mcp` 提供 Streamable HTTP，也可选择 SSE。节假日数据随依赖本地安装，运行时不需要访问在线节假日 API。
 
 ## 这份文档不是什么
 

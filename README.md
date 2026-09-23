@@ -23,6 +23,19 @@ make format
 make check
 ```
 
+### HTTP MCP server
+
+Start the Streamable HTTP MCP server on `127.0.0.1:8000`:
+
+```bash
+uv run calendo-http
+```
+
+The MCP endpoint is `http://127.0.0.1:8000/mcp`. Bind a different address or
+port with `--host` and `--port`; use `--transport sse` for legacy SSE clients.
+The same settings are available through `CALENDO_HTTP_HOST`,
+`CALENDO_HTTP_PORT`, and `CALENDO_HTTP_TRANSPORT`.
+
 更多命令见 `make help`。
 
 ## 项目结构
