@@ -18,7 +18,13 @@ classifiers = [
     "Programming Language :: Python :: 3.14",
     "Operating System :: OS Independent",
 ]
-dependencies = []
+dependencies = [
+    "holidays>=0.105",
+    "mcp<2",
+]
+
+[project.scripts]
+calendo = "calendo.server:main"
 
 [project.optional-dependencies]
 dev = [

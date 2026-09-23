@@ -4,21 +4,23 @@
 
 ## What this system is
 
-[placeholder — one paragraph describing what the system does and its
-positioning]
+calendo is an offline-capable MCP server that exposes public holiday data to
+AI agent and LLM clients. The first implementation serves China holidays from
+vacanza/holidays. See [ADR-0001](docs/decisions/2026-09-23-0001-china-holidays-mcp.md)
+for the source and protocol decision.
 
 ## Components
 
-[placeholder — list the system's main components. For each, link to the
-ADR that decided it, e.g.:]
-
-- **[Component name]**: [what it does]. See the ADR that decided it
-  under `docs/decisions/` (format: `[ADR-000X](docs/decisions/<file>.md)`).
+- **Holiday source adapter**: Converts vacanza/holidays China records into
+  stable ISO-date JSON records. See
+  [ADR-0001](docs/decisions/2026-09-23-0001-china-holidays-mcp.md).
+- **MCP server**: Registers `china_public_holidays` and serves it over stdio.
+  See [ADR-0001](docs/decisions/2026-09-23-0001-china-holidays-mcp.md).
 
 ## Deployment modes
 
-[placeholder — if the system has more than one deployment shape, describe
-them here]
+The current entry point serves MCP over stdio. The holiday data is packaged
+locally, so runtime access to a holiday API is not required.
 
 ## What this document is not
 

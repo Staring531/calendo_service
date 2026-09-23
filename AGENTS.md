@@ -13,10 +13,8 @@ calendo (domain: calendo.day) is a public MCP server exposing worldwide
 public holidays to AI agent/LLM clients, with multi-language holiday
 translation. Data source is vacanza/holidays (Python, offline, 250+
 countries) rather than a live API, and the project supports both
-online-sync and offline/air-gapped deployment modes. Current stage: the
-ADR/CI governance scaffolding described below is in place, but `src/calendo/`
-still only contains a placeholder `add()` function — no real MVP
-implementation has started yet.
+online-sync and offline/air-gapped deployment modes. The first MVP tool,
+`china_public_holidays`, is implemented under `src/calendo/`.
 
 ## Build & test commands
 
@@ -91,12 +89,8 @@ Ordering below, from strongest to weakest evidence — see
 
 ## Architecture decision links
 
-[placeholder — as ADRs accumulate under docs/decisions/, link them here.
-Format: a markdown link with the ADR number as link text, pointing at
-its file path under docs/decisions/, followed by one line on what it
-decided. (This section intentionally avoids writing a literal example
-link here, since the ADR-link checker in tests/test_adr_governance.py
-would flag it as a broken link — see that file's `test_agents_md_adr_links_resolve`.)]
+- [ADR-0001](docs/decisions/2026-09-23-0001-china-holidays-mcp.md) — 使用
+  vacanza/holidays 和 Python MCP SDK 实现首个中国节假日工具。
 
 ## CI mechanical checks currently in place
 
