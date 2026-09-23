@@ -68,5 +68,5 @@ Test）——七条判断依据（辅助判断的 checklist，不是打分工具
 - ADR 命名允许各项目自定义，不强制统一格式（jamesmh/architecture_decision_record
   的立场）——上面这套是本项目的选择，不是唯一正确答案
 
-**固定模板**：见同目录下的 `ADR-TEMPLATE.en.md`（英文）和 `ADR-TEMPLATE.zh.md`（中文），
+**固定模板**：见同目录下的 `ADR-TEMPLATE.md`（英文）和 `ADR-TEMPLATE.zh.md`（中文），
 新开 ADR 时复制这两个文件，不要从零写。

@@ -2,7 +2,7 @@
 
 > Status：探索中——还不是ADR。等定下具体方案后才升级成ADR（流程见
 > `docs/decisions/README.md`的Proposed → Accepted）。
-> English version: [DESIGN-DOC-TEMPLATE.en.md](DESIGN-DOC-TEMPLATE.en.md)（开始写真正的design doc时，
+> English version: [DESIGN-DOC-TEMPLATE.md](DESIGN-DOC-TEMPLATE.md)（开始写真正的design doc时，
 > 复制这两份文件并改名）。
 
 ## 问题

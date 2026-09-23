@@ -51,7 +51,7 @@ Ordering below, from strongest to weakest evidence — see
 2. **When a design isn't settled enough for an ADR yet**, write a
    lightweight exploratory doc under `docs/design-docs/` first; promote it
    to an ADR once a concrete decision is made. Template:
-   `docs/design-docs/DESIGN-DOC-TEMPLATE.en.md`.
+   `docs/design-docs/DESIGN-DOC-TEMPLATE.md`.
 3. **Data model / interfaces before business logic** (type-first /
    schema-first): define the data shape before writing the logic that
    processes it.

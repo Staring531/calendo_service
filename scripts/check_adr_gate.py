@@ -73,12 +73,13 @@ def touches_sensitive_path(changed_files: list[str], sensitive_paths: list[str])
 
 
 def has_new_adr(changed_files: list[str]) -> bool:
-    # 命名规则：docs/decisions/YYYY-MM-DD-NNNN-short-title.en.md（或 .zh.md）
-    # 排除 README.md 和 ADR-TEMPLATE.en.md/.zh.md——它们在 docs/decisions/ 下但不是 ADR 本身。
+    # 命名规则：docs/decisions/YYYY-MM-DD-NNNN-short-title.md（英文，默认版本），
+    # 或 docs/decisions/YYYY-MM-DD-NNNN-short-title.zh.md（中文版本）。
+    # 排除 README.md 和 ADR-TEMPLATE.md/.zh.md——它们在 docs/decisions/ 下但不是 ADR 本身。
     return any(
         f.startswith("docs/decisions/")
         and re.match(
-            r"docs/decisions/\d{4}-\d{2}-\d{2}-\d{4}-.+\.(en|zh)\.md$", f
+            r"docs/decisions/\d{4}-\d{2}-\d{2}-\d{4}-.+(?:\.zh)?\.md$", f
         )
         for f in changed_files
     )

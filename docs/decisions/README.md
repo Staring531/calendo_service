@@ -91,6 +91,6 @@ default version), paired with a `YYYY-MM-DD-NNNN-short-clear-title.zh.md`
   format (per jamesmh/architecture_decision_record's own stance) — the
   scheme above is this project's choice, not the only correct answer
 
-**Fixed template**: see `ADR-TEMPLATE.en.md` (English) and `ADR-TEMPLATE.zh.md`
+**Fixed template**: see `ADR-TEMPLATE.md` (English) and `ADR-TEMPLATE.zh.md`
 (Chinese) in this directory. Copy these when starting a new ADR — don't
 write one from scratch.

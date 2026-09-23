@@ -13,7 +13,7 @@ positioning]
 ADR that decided it, e.g.:]
 
 - **[Component name]**: [what it does]. See the ADR that decided it
-  under `docs/decisions/` (format: `[ADR-000X](docs/decisions/<file>.en.md)`).
+  under `docs/decisions/` (format: `[ADR-000X](docs/decisions/<file>.md)`).
 
 ## Deployment modes
 

@@ -27,7 +27,7 @@ AGENTS_MD = REPO_ROOT / "AGENTS.md"
 
 # 对应 README「文件命名与目录结构」一节的正则
 ADR_FILENAME_RE = re.compile(
-    r"^(?P<date>\d{4}-\d{2}-\d{2})-(?P<num>\d{4})-(?P<slug>[a-z0-9-]+)\.(?P<lang>en|zh)\.md$"
+    r"^(?P<date>\d{4}-\d{2}-\d{2})-(?P<num>\d{4})-(?P<slug>[a-z0-9-]+)(?:\.(?P<lang>zh))?\.md$"
 )
 
 VALID_STATUS_PREFIXES = ("Proposed", "Accepted", "Deprecated", "Superseded by ADR-")
@@ -50,27 +50,27 @@ def test_decisions_dir_exists():
 
 
 def test_template_files_exist():
-    assert (DECISIONS_DIR / "ADR-TEMPLATE.en.md").exists(), "缺少 ADR-TEMPLATE.en.md"
+    assert (DECISIONS_DIR / "ADR-TEMPLATE.md").exists(), "缺少 ADR-TEMPLATE.md"
     assert (DECISIONS_DIR / "ADR-TEMPLATE.zh.md").exists(), "缺少 ADR-TEMPLATE.zh.md"
 
 
 @pytest.mark.parametrize("path", _adr_files(), ids=lambda p: p.name)
 def test_filename_matches_convention(path: Path):
-    """对应 README：文件名必须是 YYYY-MM-DD-NNNN-标题.{en,zh}.md"""
+    """对应 README：英文 YYYY-MM-DD-NNNN-标题.md，中文 YYYY-MM-DD-NNNN-标题.zh.md"""
     assert ADR_FILENAME_RE.match(path.name), (
-        f"{path.name} 不符合命名约定 YYYY-MM-DD-NNNN-标题.{{en,zh}}.md"
+        f"{path.name} 不符合命名约定 YYYY-MM-DD-NNNN-标题.md（中文版为 .zh.md）"
     )
 
 
 def test_every_adr_has_bilingual_pair():
-    """对应 README：每份 ADR 必须同时有 .en.md 和 .zh.md"""
+    """对应 README：每份 ADR 必须同时有英文 .md 和中文 .zh.md"""
     files = _adr_files()
     keys = set()
     langs_by_key: dict[str, set[str]] = {}
     for f in files:
         m = ADR_FILENAME_RE.match(f.name)
         key = f"{m.group('date')}-{m.group('num')}-{m.group('slug')}"
-        langs_by_key.setdefault(key, set()).add(m.group("lang"))
+        langs_by_key.setdefault(key, set()).add(m.group("lang") or "en")
         keys.add(key)
 
     missing = []
