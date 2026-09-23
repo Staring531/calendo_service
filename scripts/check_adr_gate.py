@@ -42,11 +42,7 @@ def load_sensitive_paths(path: str) -> list[str]:
     对应哪条 ADR，只有具体项目的维护者知道，脚本不该替任何项目做这个判断。
     """
     with open(path, encoding="utf-8") as f:
-        return [
-            line.strip()
-            for line in f
-            if line.strip() and not line.strip().startswith("#")
-        ]
+        return [line.strip() for line in f if line.strip() and not line.strip().startswith("#")]
 
 
 def get_changed_files(base: str, head: str) -> list[str]:
@@ -78,9 +74,7 @@ def has_new_adr(changed_files: list[str]) -> bool:
     # 排除 README.md 和 ADR-TEMPLATE.md/.zh.md——它们在 docs/decisions/ 下但不是 ADR 本身。
     return any(
         f.startswith("docs/decisions/")
-        and re.match(
-            r"docs/decisions/\d{4}-\d{2}-\d{2}-\d{4}-.+(?:\.zh)?\.md$", f
-        )
+        and re.match(r"docs/decisions/\d{4}-\d{2}-\d{2}-\d{4}-.+(?:\.zh)?\.md$", f)
         for f in changed_files
     )
 

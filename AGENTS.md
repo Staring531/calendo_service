@@ -38,6 +38,18 @@ Per this repo's own README.md ("开发规范"):
 - Type checking: `mypy`, strict mode
 - Dependency management: `uv add` / `uv remove` only — do not hand-edit
   the dependency arrays in `pyproject.toml`
+- Follow the [Google Python Style Guide](https://google.github.io/styleguide/pyguide.html)
+
+
+## Code Quality
+
+- **Avoid trivial comments**: Do not add comments that simply restate what the code obviously does. Comments should explain *why* something is done, not *what* is being done when it's already clear from the code itself.
+  - ❌ Bad: `# Add temperature` before `config['temperature'] = 0.7`
+  - ❌ Bad: `# Loop through items` before `for item in items:`
+  - ✅ Good: `# Workaround: Claude requires max_tokens to be specified` before `config['max_tokens'] = 1000`
+  - ✅ Good: Comments explaining complex algorithms, non-obvious business logic, or workarounds for known issues
+
+
 
 ## Development process (design before code)
 
@@ -93,6 +105,8 @@ Ordering below, from strongest to weakest evidence — see
   vacanza/holidays 和 Python MCP SDK 实现首个中国节假日工具。
 - [ADR-0002](docs/decisions/2026-09-23-0002-http-mcp-transport.md) — 增加
   Streamable HTTP MCP 入口，并保留 SSE 兼容选项。
+- [ADR-0003](docs/decisions/2026-09-23-0003-logging-retention.md) — 增加
+  32 MiB 日志轮转、gzip 压缩和默认 7 天保留策略。
 
 ## CI mechanical checks currently in place
 

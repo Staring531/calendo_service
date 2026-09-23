@@ -9,6 +9,7 @@ from typing import Literal
 from mcp.server.fastmcp import FastMCP
 
 from calendo.china_holidays import ChinaHoliday, list_china_holidays
+from calendo.log_config import configure_logging
 
 mcp = FastMCP(
     "calendo",
@@ -22,11 +23,13 @@ mcp = FastMCP(
 )
 def china_public_holidays(year: int) -> list[ChinaHoliday]:
     """根据年份返回中国法定节假日列表。"""
+    configure_logging().info("querying China public holidays for year=%d", year)
     return list_china_holidays(year)
 
 
 def main() -> None:
     """Run the MCP server over stdio for local agent integrations."""
+    configure_logging().info("starting calendo MCP server with stdio transport")
     mcp.run(transport="stdio")
 
 
@@ -49,6 +52,12 @@ def run_http_server(
         raise ValueError("host must not be empty")
     if not 1 <= port <= 65535:
         raise ValueError("port must be between 1 and 65535")
+    configure_logging().info(
+        "starting calendo MCP server with transport=%s host=%s port=%d",
+        transport,
+        host,
+        port,
+    )
     mcp.settings.host = host
     mcp.settings.port = port
     mcp.run(transport=transport)

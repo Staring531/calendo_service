@@ -36,6 +36,14 @@ port with `--host` and `--port`; use `--transport sse` for legacy SSE clients.
 The same settings are available through `CALENDO_HTTP_HOST`,
 `CALENDO_HTTP_PORT`, and `CALENDO_HTTP_TRANSPORT`.
 
+### Logging
+
+Server startup and holiday queries are written to `logs/calendo.log` by
+default. The active file rotates at 32 MiB or on a calendar-day change;
+completed files are gzip-compressed and files older than 7 days are removed.
+Set `CALENDO_LOG_DIR`, `CALENDO_LOG_MAX_BYTES`, and
+`CALENDO_LOG_RETENTION_DAYS` to override these defaults.
+
 更多命令见 `make help`。
 
 ## 项目结构

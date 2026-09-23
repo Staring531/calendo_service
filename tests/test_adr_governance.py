@@ -90,9 +90,7 @@ def test_adr_numbers_are_sequential_no_gaps_no_duplicates():
         pytest.skip("还没有任何 ADR，跳过编号连续性检查")
 
     expected = list(range(1, len(numbers) + 1))
-    assert numbers == expected, (
-        f"ADR 编号不连续或有跳号/重复：实际 {numbers}，期望 {expected}"
-    )
+    assert numbers == expected, f"ADR 编号不连续或有跳号/重复：实际 {numbers}，期望 {expected}"
 
 
 @pytest.mark.parametrize("path", _adr_files(), ids=lambda p: p.name)
@@ -111,8 +109,7 @@ def test_status_value_is_valid(path: Path):
     assert m, f"{path.name} 没有找到 Status 字段"
     status_line = m.group(1).strip()
     assert status_line.startswith(VALID_STATUS_PREFIXES), (
-        f"{path.name} 的 Status 值 '{status_line}' 不是合法取值 "
-        f"{VALID_STATUS_PREFIXES}"
+        f"{path.name} 的 Status 值 '{status_line}' 不是合法取值 {VALID_STATUS_PREFIXES}"
     )
 
 

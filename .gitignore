@@ -31,3 +31,8 @@ htmlcov/
 .env
 .env.*
 
+# Runtime logs
+logs/
+
+#
+my_resource/

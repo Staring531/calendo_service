@@ -34,11 +34,7 @@ EMERGENCY_MARKER = re.compile(r"emergency:\s*(.+)", re.IGNORECASE)
 
 def load_paths(path: str) -> list[str]:
     with open(path, encoding="utf-8") as f:
-        return [
-            line.strip()
-            for line in f
-            if line.strip() and not line.strip().startswith("#")
-        ]
+        return [line.strip() for line in f if line.strip() and not line.strip().startswith("#")]
 
 
 def get_changed_files(base: str, head: str) -> list[str]:

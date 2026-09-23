@@ -26,6 +26,7 @@ def list_china_holidays(year: int) -> list[ChinaHoliday]:
     if not MIN_SUPPORTED_YEAR <= year <= MAX_SUPPORTED_YEAR:
         raise ValueError(f"year must be between {MIN_SUPPORTED_YEAR} and {MAX_SUPPORTED_YEAR}")
 
+    # holidays exposes China dynamically and does not type its constructor.
     holidays = China(years=year)  # type: ignore[no-untyped-call]
     return [
         {"date": holiday_date.isoformat(), "name": name}

@@ -1,0 +1,14 @@
+1、docs/decision/
+ - 质量太差
+ - 缺少边界，必须明确。取舍也应该写入pr还是文件中暂未想清楚
+ - 后续agents.md 
+
+2、arch.md
+
+ - 感觉有点鸡肋
+ - 缺乏边界
+ - 部署方法，cicd应该部署架构
+
+3、ADR 为什么直接就是accepted状态，没有proposal状态
+
+4、

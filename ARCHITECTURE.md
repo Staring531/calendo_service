@@ -17,6 +17,9 @@ for the source and protocol decision.
 - **MCP server**: Registers `china_public_holidays` and serves it over stdio
   or Streamable HTTP (`/mcp`).
   See [ADR-0001](docs/decisions/2026-09-23-0001-china-holidays-mcp.md).
+- **Logging**: Writes timestamped server events to a size- and day-rotated log,
+  compresses completed files with gzip, and retains seven days by default. See
+  [ADR-0003](docs/decisions/2026-09-23-0003-logging-retention.md).
 
 ## Deployment modes
 
