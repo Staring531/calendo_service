@@ -8,17 +8,34 @@
 
 ## 项目概述
 
-[占位符——一段话说清楚：这是什么项目、差异化在哪、目前处于什么阶段]
+calendo（域名 calendo.day）是一个面向 AI agent/LLM 客户端的公共假日 MCP 服务，
+支持多语言假日翻译。数据源用 vacanza/holidays（Python，离线，覆盖 250+ 国家/
+地区），不实时调用外部 API；同时支持在线同步和离线/物理隔离两种部署模式。
+当前阶段：下面这套 ADR/CI 治理骨架已经搭好，但 `src/calendo/` 目前只有一个
+占位用的 `add()` 函数，MVP 的真实实现还没开始。
 
 ## 构建与测试命令
 
-[占位符——不要假设具体命令。agent在这个仓库里工作前，应该先去
-pyproject.toml / package.json / Makefile 等文件里确认实际命令，
-而不是凭空编。]
+本项目用 `uv` + `Makefile`，完整列表见 `make help`。下面这些命令原样照抄自
+真实的 `Makefile` target：
+
+- `make sync` —— 安装/同步依赖（`uv sync --all-extras`）
+- `make lint` —— ruff 检查
+- `make format` —— ruff check --fix + ruff format
+- `make typecheck` —— mypy（检查 src/）
+- `make test` —— pytest
+- `make cov` —— pytest 并生成 HTML 覆盖率报告
+- `make check` —— lint + typecheck + test 一次跑完，提交前/CI 用这个
+- `make build` / `make clean`
 
 ## 代码风格
 
-[占位符——项目专属的代码规范，如果有的话]
+照抄本仓库自己 README.md「开发规范」一节：
+
+- 检查/格式化：统一用 `ruff`（替代 flake8 + isort + black）
+- 类型检查：`mypy`，strict 模式
+- 依赖管理：只用 `uv add` / `uv remove`——不要手改 `pyproject.toml`
+  里的依赖数组
 
 ## 研发流程（设计先于代码）
 
@@ -47,7 +64,14 @@ pyproject.toml / package.json / Makefile 等文件里确认实际命令，
 
 ## 已知坑（footguns）
 
-[占位符——项目专属的坑，发现一个记一个，避免下次agent会话重新踩一遍]
+- `git diff --name-only` 默认会把非 ASCII（比如中文）文件名转成八进制转义，
+  会让对 `sensitive-paths.txt` / `src-paths.txt` 的前缀匹配悄悄失效。
+  `scripts/check_adr_gate.py` 和 `scripts/check_pr_bundle.py` 已经加了
+  `-c core.quotepath=false` 来绕过这个问题——不要去掉这个参数，也不要重新实现
+  一遍不带这个参数的 git diff 调用。
+- 在 `src/calendo/` 下新建文件时，如果模块名跟 Python 标准库同名（比如
+  `types.py`），可能触发循环导入崩溃——测试这套治理工具时真实遇到过一次。
+  给 `src/calendo/` 下的新文件起名时避开标准库模块名。
 
 ## 架构决策链接
 

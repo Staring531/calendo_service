@@ -1,4 +1,4 @@
 # Project-specific: production source paths, used by
 # scripts/check_pr_bundle.py. Placeholder — replace with your real
 # source directory.
-TODO_replace_with_real_source_path/
+src/calendo/

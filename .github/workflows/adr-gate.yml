@@ -9,7 +9,7 @@ name: ADR gate
 
 on:
   pull_request:
-    branches: [main]
+    branches: [master]
 
 jobs:
   check-adr:

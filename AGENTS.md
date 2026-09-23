@@ -9,18 +9,37 @@
 
 ## Project overview
 
-[placeholder — one paragraph: what this project is, its differentiation,
-its current stage]
+calendo (domain: calendo.day) is a public MCP server exposing worldwide
+public holidays to AI agent/LLM clients, with multi-language holiday
+translation. Data source is vacanza/holidays (Python, offline, 250+
+countries) rather than a live API, and the project supports both
+online-sync and offline/air-gapped deployment modes. Current stage: the
+ADR/CI governance scaffolding described below is in place, but `src/calendo/`
+still only contains a placeholder `add()` function — no real MVP
+implementation has started yet.
 
 ## Build & test commands
 
-[placeholder — do not assume commands. An agent working in this repo
-should confirm from pyproject.toml / package.json / Makefile etc.
-before running anything, rather than guessing.]
+This project uses `uv` + a `Makefile`; run `make help` for the full list.
+The commands below are copied verbatim from the actual `Makefile` targets:
+
+- `make sync` — install/sync dependencies (`uv sync --all-extras`)
+- `make lint` — ruff check
+- `make format` — ruff check --fix + ruff format
+- `make typecheck` — mypy (src/)
+- `make test` — pytest
+- `make cov` — pytest with HTML coverage report
+- `make check` — lint + typecheck + test, run this before committing / in CI
+- `make build` / `make clean`
 
 ## Code style
 
-[placeholder — project-specific conventions, if any]
+Per this repo's own README.md ("开发规范"):
+
+- Lint/format: `ruff` (replaces flake8 + isort + black)
+- Type checking: `mypy`, strict mode
+- Dependency management: `uv add` / `uv remove` only — do not hand-edit
+  the dependency arrays in `pyproject.toml`
 
 ## Development process (design before code)
 
@@ -59,9 +78,16 @@ Ordering below, from strongest to weakest evidence — see
 
 ## Known footguns
 
-[placeholder — record project-specific gotchas here as they're
-discovered, so the next agent session doesn't rediscover them the hard
-way]
+- `git diff --name-only` escapes non-ASCII (e.g. Chinese) filenames as
+  octal by default, which silently breaks prefix matching against
+  `sensitive-paths.txt` / `src-paths.txt`. Both `scripts/check_adr_gate.py`
+  and `scripts/check_pr_bundle.py` already pass `-c core.quotepath=false`
+  to work around this — don't remove that flag or reimplement the git
+  diff call without it.
+- A module named the same as a Python stdlib module (e.g. `types.py`)
+  under `src/calendo/` can trigger a circular-import crash — this was hit
+  once while testing this project's governance tooling. Avoid stdlib
+  module names when naming new files under `src/calendo/`.
 
 ## Architecture decision links
 

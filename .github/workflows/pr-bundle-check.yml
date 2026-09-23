@@ -2,7 +2,7 @@ name: PR bundle check (test + code + changelog)
 
 on:
   pull_request:
-    branches: [main]
+    branches: [master]
 
 jobs:
   check-bundle:
@@ -21,4 +21,5 @@ jobs:
             --base origin/${{ github.base_ref }} \
             --head HEAD \
             --src-paths-file docs/decisions/src-paths.txt \
+            --changelog-path-prefix CHANGELOG/ \
             --pr-body-file /tmp/pr_body.txt
