@@ -62,6 +62,19 @@ calendo（域名 calendo.day）是一个面向 AI agent/LLM 客户端的公共�
 - 注释不等于文档——类/模块/函数的文档说明的是用途、用法、行为，
   跟行内注释是两回事。
 
+## PR 流程（架构级改动走两个 PR）
+
+1. **设计 PR（仅文档）**：ADR（`.md` + `.zh.md`，`Status: Proposed`）和/或
+   设计文档。不改 `src/`。使用 `.github/PULL_REQUEST_TEMPLATE/adr.md`。
+2. **审批**：由 PR 负责人或指定评审 agent 审批，审批人必须是与 PR 作者不同的
+   GitHub 账号（见 `docs/decisions/README.zh.md`）。审批通过后把 `Status`
+   改为 `Accepted` 并合并。
+3. **实现 PR**：只有 ADR 在 `master` 上已是 `Accepted` 才能开始。从 `master`
+   拉分支；代码 + 测试 + `CHANGELOG/unreleased/` 条目在同一 PR。使用
+   `.github/PULL_REQUEST_TEMPLATE/code.md`。
+4. agent 不得审批自己提的 PR；除非是指定审批人且不是该 PR 作者，否则不得把
+   ADR 改成 `Accepted`。
+
 ## 已知坑（footguns）
 
 - `git diff --name-only` 默认会把非 ASCII（比如中文）文件名转成八进制转义，
@@ -90,6 +103,7 @@ calendo（域名 calendo.day）是一个面向 AI agent/LLM 客户端的公共�
   `emergency:`标记可以豁免。
 - `tests/test_adr_governance.py`——pytest套件，核验ADR文件名、编号
   连续性、Status合法取值、双语配对、AGENTS.md链接有效性。
+- `.github/workflows/ci.yml` — 对每个到 `master` 的 PR 运行 `make sync` 和 `make check`（lint + typecheck + test）。
 
 ## 深入文档
 

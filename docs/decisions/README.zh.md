@@ -50,8 +50,16 @@ Test）——七条判断依据（辅助判断的 checklist，不是打分工具
 
 ## 谁能把 Proposed 改成 Accepted
 
-依赖项目具体是团队协作还是个人维护，没有通用答案，需要各项目自己在这里补充
-说明谁有权限做这件事、走什么确认方式。
+ADR 通过独立的、仅含文档的 PR 提出，初始 `Status: Proposed`。
+
+- **审批人**：PR 负责人（仓库所有者）或指定的评审 agent。审批人必须是与
+  PR 作者不同的 GitHub 账号，并通过 GitHub PR review 给出批准。
+- **审批通过后**：在同一 PR 分支上追加一个提交，把 ADR 的 `Status` 改为
+  `Accepted`，然后合并。`master` 上出现 `Accepted` 才允许开始实现。
+- 实现（代码 + 测试 + changelog）放在之后另开的 PR，从已包含 `Accepted` ADR
+  的 `master` 拉分支。
+- `docs/design-docs/` 下的设计文档没有 Status 字段；同样走 PR 评审，但只有
+  `Accepted` 的 ADR 才能解锁实现。
 
 ## 文件命名与目录结构
 

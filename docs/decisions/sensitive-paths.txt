@@ -1,5 +1,10 @@
 # Project-specific: architecturally sensitive paths, used by
-# scripts/check_adr_gate.py. This is a placeholder — replace with your
-# project's real directories. One path prefix per line, # for comments.
-TODO_replace_with_real_data_layer_path/
-TODO_replace_with_real_protocol_or_interface_path/
+# scripts/check_adr_gate.py. One path prefix per line; a whole line starting
+# with # is a comment (do NOT put a trailing # comment after a path, the
+# script would treat it as part of the prefix).
+#
+# Data source adapter (vacanza/holidays), see ADR-0001 / ARCHITECTURE.md
+src/calendo/china_holidays.py
+# MCP tool registration and transports (stdio / Streamable HTTP / SSE),
+# see ADR-0001, ADR-0002 / ARCHITECTURE.md
+src/calendo/server.py

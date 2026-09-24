@@ -68,8 +68,18 @@ ADR-XXXX`.
 
 ## Who can move Proposed to Accepted
 
-Depends on whether the project is team-run or solo-maintained — no
-universal answer. Fill this in per-project.
+An ADR is proposed in its own docs-only PR with `Status: Proposed`.
+
+- **Approver**: the PR owner (repository owner) or a designated review
+  agent. The approver must be a GitHub account other than the PR author,
+  and approves through a GitHub PR review.
+- **After approval**: a final commit on the same PR branch changes the
+  ADR's `Status` to `Accepted`, then the PR is merged. `Accepted` on
+  `master` is what allows implementation to start.
+- Implementation (code + tests + changelog) goes in a separate, later PR
+  branched from a `master` that already contains the `Accepted` ADR.
+- Design docs under `docs/design-docs/` have no Status field; they are
+  reviewed in a PR too, but only an `Accepted` ADR unlocks implementation.
 
 ## File naming and directory structure
 

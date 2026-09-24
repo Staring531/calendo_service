@@ -86,6 +86,21 @@ Ordering below, from strongest to weakest evidence — see
   documentation covers purpose, usage, and behavior; that's a different
   thing from an inline comment.
 
+## PR workflow (architecture-level changes use two PRs)
+
+1. **Design PR (docs only)**: ADR (`.md` + `.zh.md`, `Status: Proposed`)
+   and/or a design doc. No changes under `src/`. Use
+   `.github/PULL_REQUEST_TEMPLATE/adr.md`.
+2. **Approval**: by the PR owner or a designated review agent, who must be
+   a different GitHub account from the PR author (see
+   `docs/decisions/README.md`). After approval, change `Status` to
+   `Accepted` and merge.
+3. **Implementation PR**: only after the ADR is `Accepted` on `master`.
+   Branch from `master`; code + tests + `CHANGELOG/unreleased/` entry in
+   the same PR. Use `.github/PULL_REQUEST_TEMPLATE/code.md`.
+4. An agent must not approve its own PR, and must not mark an ADR
+   `Accepted` unless it is the designated approver and not the PR author.
+
 ## Known footguns
 
 - `git diff --name-only` escapes non-ASCII (e.g. Chinese) filenames as
@@ -120,6 +135,7 @@ Ordering below, from strongest to weakest evidence — see
 - `tests/test_adr_governance.py` — a pytest suite validating ADR file
   naming, sequential numbering, valid Status values, bilingual pairing,
   and that AGENTS.md's ADR links resolve.
+- `.github/workflows/ci.yml` — runs `make sync` and `make check` (lint + typecheck + test) on every PR to `master`.
 
 ## Further reading
 
