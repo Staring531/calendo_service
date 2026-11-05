@@ -22,7 +22,7 @@ Repository = "https://github.com/Staring531/calendo_service"
 Changelog = "https://github.com/Staring531/calendo_service/blob/main/CHANGELOG.md"
 
 [build-system]
-requires = ["uv_build>=0.11.32,<0.12"]
+requires = ["uv_build>=0.11.32,<0.14"]
 build-backend = "uv_build"
 
 [tool.uv]
