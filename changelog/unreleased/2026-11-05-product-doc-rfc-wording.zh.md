@@ -3,6 +3,7 @@
 - **Date:** 2026-11-05
 - **Type:** process
 - **Scope:** `docs`
+- **PR:** [#7](https://github.com/Staring531/calendo_service/pull/7)
 
 [English](2026-11-05-product-doc-rfc-wording.md)
 
