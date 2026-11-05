@@ -1,0 +1,60 @@
+name: "缺陷 / Bug"
+description: "记录实际行为、预期行为、影响和复现信息。"
+title: "[缺陷] "
+body:
+  - type: markdown
+    attributes:
+      value: "记录已经观察到的不符合预期的行为。请区分观察事实与原因推测。"
+  - type: textarea
+    id: actual
+    attributes:
+      label: 实际行为
+      description: 实际发生了什么？请描述观察到的现象。
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: 预期行为
+      description: 根据哪条需求、设计或规则，预期结果应是什么？
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: 复现步骤与条件
+      description: 提供可重复步骤、输入、前置条件和发生频率；无法稳定复现时说明已尝试的方式。
+    validations:
+      required: false
+  - type: textarea
+    id: impact
+    attributes:
+      label: 影响范围与严重程度
+      description: 哪些功能、数据或流程受到影响？请只填写已知情况。
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: 环境信息
+      description: 记录可确认的系统、运行环境、版本和相关配置。
+      placeholder: |
+        - 系统/运行环境：
+        - 应用版本或提交：
+        - 相关配置：
+    validations:
+      required: false
+  - type: textarea
+    id: evidence
+    attributes:
+      label: 日志、截图与其他证据
+      description: 附上日志、错误信息、截图或可复核链接。请移除密码、令牌和个人敏感信息。
+    validations:
+      required: false
+  - type: textarea
+    id: workaround
+    attributes:
+      label: 临时规避方式
+      description: 是否存在已验证的临时处理方式？没有或未知时可留空。
+    validations:
+      required: false
