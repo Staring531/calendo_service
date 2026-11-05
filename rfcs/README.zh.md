@@ -23,3 +23,4 @@
 
 | 文档 | 标题 | 状态 |
 | --- | --- | --- |
+| [CRFC-0001](CRFC-0001-requirement-flow.zh.md) | 从方向到可开工的 issue | draft |

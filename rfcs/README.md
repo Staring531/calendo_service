@@ -36,3 +36,4 @@ Take the next number after the last row.
 
 | Document | Title | Status |
 | --- | --- | --- |
+| [CRFC-0001](CRFC-0001-requirement-flow.md) | From direction to workable issue | draft |
