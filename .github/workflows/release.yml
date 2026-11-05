@@ -1,0 +1,98 @@
+# Release: a pushed tag vX.Y.Z publishes a GitHub Release with the sdist, the wheel and SHA256SUMS.
+#
+# A pushed tag is never moved, so everything that can fail runs before anything is published:
+#   preflight  the tag's own tree passes scripts/check_release.py (versions, RELEASE.md, CHANGELOG)
+#              and no Release exists for it yet
+#   validate   the full CI workflow, called on the tag
+#   release    build from the tag, then publish with changelog/<version>/RELEASE.md as the body
+# A manual dispatch with an existing tag rebuilds a Release that failed before it was published.
+# Publishing to a package index is not part of this workflow.
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Tag to release (e.g. v0.1.0)
+        required: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ inputs.tag || github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      exists: ${{ steps.exists.outputs.exists }}
+      tag: ${{ steps.tag.outputs.tag }}
+      version: ${{ steps.tag.outputs.version }}
+    steps:
+      - name: Resolve the tag
+        id: tag
+        env:
+          TAG: ${{ inputs.tag || github.ref_name }}
+        run: |
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "version=${TAG#v}" >> "$GITHUB_OUTPUT"
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ steps.tag.outputs.tag }}
+      - uses: ./.github/actions/setup
+      - name: The tag can be released from this tree
+        env:
+          TAG: ${{ steps.tag.outputs.tag }}
+        run: uv run python scripts/check_release.py --tag "$TAG"
+      # Release assets are not replaced once published; a second run for the same tag stops here.
+      - name: No Release exists for the tag yet
+        id: exists
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.tag.outputs.tag }}
+        run: |
+          if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo "::notice::$TAG already has a Release; nothing to publish."
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  validate:
+    needs: preflight
+    if: needs.preflight.outputs.exists != 'true'
+    uses: ./.github/workflows/ci.yml
+    permissions:
+      contents: read
+    with:
+      ref: ${{ needs.preflight.outputs.tag }}
+
+  release:
+    needs: [preflight, validate]
+    if: needs.preflight.outputs.exists != 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ needs.preflight.outputs.tag }}
+      - uses: ./.github/actions/setup
+      - name: Build sdist and wheel
+        run: uv build
+      - name: Checksums
+        run: cd dist && sha256sum -- * > SHA256SUMS && cat SHA256SUMS
+      - name: Publish the GitHub Release
+        uses: softprops/action-gh-release@v3
+        with:
+          tag_name: ${{ needs.preflight.outputs.tag }}
+          name: Calendo ${{ needs.preflight.outputs.version }}
+          body_path: changelog/${{ needs.preflight.outputs.version }}/RELEASE.md
+          files: dist/*
+          fail_on_unmatched_files: true

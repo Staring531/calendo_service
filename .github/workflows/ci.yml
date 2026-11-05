@@ -1,0 +1,160 @@
+# Every pull request and every push to main runs the same jobs. The release workflow calls this file
+# with the tag as `ref`, so a release is validated by exactly what a pull request is.
+# Branch protection requires one check: the aggregate `ci` job at the bottom.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+    # labeled/unlabeled: adding or removing `skip-changelog` re-runs the records job.
+    types: [opened, synchronize, reopened, labeled, unlabeled]
+  workflow_dispatch:
+  workflow_call:
+    inputs:
+      ref:
+        description: Commit or tag to validate
+        type: string
+        required: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.event_name }}-${{ inputs.ref || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # Reads sources only: formatting, lint, workflow syntax, and the shape of every changelog entry
+  # and RFC. The cheapest job, so it fails first.
+  style:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.ref || '' }}
+      - uses: ./.github/actions/setup
+      - name: Format (ruff format)
+        run: uv run ruff format --check .
+      - name: Lint (ruff)
+        run: uv run ruff check --output-format=github .
+      # A workflow that does not parse produces a run with zero jobs and nothing in the PR to say so.
+      - name: Lint workflows (actionlint)
+        run: uv run actionlint
+      - name: Changelog entries
+        run: uv run python scripts/check_changelog.py
+      - name: Design RFCs
+        run: uv run python scripts/check_rfcs.py
+
+  typecheck:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.ref || '' }}
+      - uses: ./.github/actions/setup
+      - name: Typecheck (pyright, strict)
+        run: uv run pyright
+
+  # The oldest supported Python and the newest. Sockets are disabled for every test
+  # (pytest-socket, see pyproject.toml): a test that reaches the network fails instead of passing
+  # on a runner that happens to be online.
+  test:
+    name: test (Python ${{ matrix.python }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.12", "3.14"]
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.ref || '' }}
+      - uses: ./.github/actions/setup
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Tests (pytest, branch coverage)
+        run: uv run pytest --cov --cov-report=term --cov-report=xml
+      - name: Save coverage
+        if: always() && matrix.python == '3.14'
+        uses: actions/upload-artifact@v7
+        with:
+          name: coverage
+          path: coverage.xml
+          if-no-files-found: error
+          retention-days: 7
+
+  # The release builds with `uv build` and uploads what it produced. Building here, and installing
+  # the wheel into an environment that holds nothing else, finds a packaging break before a tag.
+  package:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.ref || '' }}
+      - uses: ./.github/actions/setup
+      - name: Build sdist and wheel
+        run: uv build
+      - name: The wheel carries its type marker and its license
+        run: |
+          listing="$(unzip -l dist/*.whl)"
+          for want in calendo/py.typed LICENSE; do
+            echo "$listing" | grep -q -- "$want" || { echo "::error::the wheel is missing $want"; exit 1; }
+          done
+      - name: The installed wheel reports the version pyproject.toml declares
+        run: |
+          declared="$(uv run python -c 'import tomllib; print(tomllib.load(open("pyproject.toml", "rb"))["project"]["version"])')"
+          installed="$(uv run --isolated --no-project --with dist/*.whl python -c 'import calendo; print(calendo.__version__)')"
+          echo "declared $declared, installed $installed"
+          [ "$declared" = "$installed" ]
+
+  # Pull requests only: the branch adds a changelog entry pair, and a landed RFC that changed
+  # raised its version. On any other event the job passes without checking anything.
+  records:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+        if: github.event_name == 'pull_request'
+        with:
+          fetch-depth: 0
+      - uses: ./.github/actions/setup
+        if: github.event_name == 'pull_request'
+      - name: A changelog entry ships with the change
+        if: github.event_name == 'pull_request' && !contains(github.event.pull_request.labels.*.name, 'skip-changelog')
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: uv run python scripts/check_changelog.py --require-entry --base "origin/$BASE_REF"
+      - name: Revised RFCs raise their version
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: uv run python scripts/check_rfcs.py --base "origin/$BASE_REF"
+      - name: Nothing to compare outside a pull request
+        if: github.event_name != 'pull_request'
+        run: echo "${{ github.event_name }} event; records are checked on pull requests."
+
+  # The one check branch protection requires. It fails on any job that did not succeed, so a
+  # cancelled or skipped job cannot read as green.
+  ci:
+    if: always()
+    needs: [style, typecheck, test, package, records]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Every job succeeded
+        env:
+          RESULTS: ${{ join(needs.*.result, ' ') }}
+        run: |
+          echo "job results: $RESULTS"
+          for result in $RESULTS; do
+            if [ "$result" != "success" ]; then
+              echo "::error::a required job ended as $result"
+              exit 1
+            fi
+          done

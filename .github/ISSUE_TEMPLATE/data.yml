@@ -1,0 +1,49 @@
+name: "Wrong date / 日期数据有误"
+description: "Calendo says a day is a holiday, a workday or a weekend, and the official source says otherwise. / Calendo 对某一天的判定与官方来源不一致。"
+title: "[data] "
+labels: ["type:data"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        One report per country and year is easiest to check. The official source is what decides: for China, the General Office of the State Council's holiday notice for that year.
+        一个国家、一个年份一份报告最容易核对。以官方来源为准：中国以国务院办公厅当年的放假通知为准。
+
+  - type: input
+    id: country
+    attributes:
+      label: Country / 国家
+      description: ISO 3166-1 alpha-2, plus the subdivision if one applies. / ISO 3166-1 alpha-2 代码，涉及子区划时一并写明。
+      placeholder: CN
+    validations:
+      required: true
+
+  - type: textarea
+    id: dates
+    attributes:
+      label: Dates and what Calendo returned / 日期与 Calendo 的返回
+      description: |
+        One line per date: the date, the `type`, `status` and `data_version` Calendo returned, and what it should be. Paste the request you made if you have it.
+        每个日期一行：日期、Calendo 返回的 `type`、`status` 与 `data_version`，以及应为什么。有请求原文的话一并贴上。
+      placeholder: |
+        2025-10-11  returned type=workday status=official data_version=…  should be adjusted_workday
+      render: text
+    validations:
+      required: true
+
+  - type: input
+    id: source
+    attributes:
+      label: Official source / 官方来源
+      description: A link to the notice or the government page that states the arrangement. / 写明该安排的通知或政府页面链接。
+      placeholder: https://www.gov.cn/...
+    validations:
+      required: true
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes / 补充说明
+      description: Anything else that helps check it, such as a later correction to the notice. / 其他有助于核对的信息，例如通知后来的更正。
+    validations:
+      required: false

@@ -1,0 +1,26 @@
+# Shared prologue for every CI job: uv on PATH, the requested Python, and the locked environment.
+#
+# uv's version comes from `[tool.uv] required-version` in pyproject.toml, so CI and a contributor's
+# machine agree on the resolver. setup-uv stopped publishing floating major tags after v7, so the
+# action is pinned to an exact release; Dependabot moves it.
+name: Set up uv, Python and dependencies
+description: Installs uv with a warm cache, the requested Python, and the dependencies uv.lock pins.
+
+inputs:
+  python-version:
+    description: Python to run on. Empty uses .python-version.
+    required: false
+    default: ""
+
+runs:
+  using: composite
+  steps:
+    - uses: astral-sh/setup-uv@v10.3.3
+      with:
+        enable-cache: true
+        python-version: ${{ inputs.python-version }}
+
+    # --locked fails when pyproject.toml and uv.lock disagree, instead of quietly re-resolving.
+    - name: Install dependencies
+      shell: bash
+      run: uv sync --locked

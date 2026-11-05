@@ -1,76 +1,44 @@
-name: "需求 / Feature"
-description: "记录需要解决的问题、预期结果和可验证的验收条件。"
-title: "[需求] "
-labels:
-  - "type:feature"
+name: "Feature request / 需求"
+description: "Something Calendo should be able to answer or do. / Calendo 应当能够回答或做到的事。"
+title: "[feature] "
+labels: ["type:feature"]
 body:
-  - type: markdown
-    attributes:
-      value: |
-        用于描述需要交付的能力或改进。请描述问题和结果，不要预先指定未经调查的技术实现。
-
   - type: textarea
     id: problem
     attributes:
-      label: 要解决的问题
-      description: 当前遇到什么问题、限制或机会？谁/什么受到影响？
-      placeholder: 描述现状、触发场景和影响。
+      label: The problem / 要解决的问题
+      description: |
+        Who is asking what, and where Calendo gets in the way today. A concrete question someone asks is worth more than a feature name.
+        谁在问什么，Calendo 目前卡在哪里。一句真实会被问到的话，比一个功能名称更有用。
+      placeholder: 「下周三之后的第 5 个工作日是哪天？」
     validations:
       required: true
 
   - type: textarea
-    id: desired-outcome
+    id: proposal
     attributes:
-      label: 预期结果
-      description: 完成后应发生什么变化？如何判断结果有价值？
-      placeholder: 描述可观察的结果，不要只写实现方式。
+      label: What it should do / 期望的行为
+      description: |
+        The answer you expect, and where it would come from: an MCP tool, an HTTP endpoint, or the site.
+        期望得到的回答，以及从哪里得到：MCP 工具、HTTP 接口，还是官网。
     validations:
       required: true
 
   - type: textarea
-    id: scope-in
+    id: done
     attributes:
-      label: 本次范围
-      description: 明确本次需要包含的内容。
+      label: How to tell it is done / 如何判断完成
+      description: |
+        Questions with their right answers, each checkable without reading the code. Say where each answer comes from.
+        带标准答案的问题，每条都不看代码就能核对。写明每个答案的依据。
       placeholder: |
-        - 包含……
-    validations:
-      required: true
-
-  - type: textarea
-    id: scope-out
-    attributes:
-      label: 明确不包含的内容
-      description: 写明容易被误认为属于本次需求、但本次不处理的事项。尚未确定时可留空。
-      placeholder: |
-        - 不包含……
+        - 2025-10-11 in CN is adjusted_workday (source: 国务院办公厅 2025 年放假通知)
     validations:
       required: false
 
   - type: textarea
-    id: acceptance-criteria
+    id: alternatives
     attributes:
-      label: 验收条件
-      description: 每条条件应能够通过检查、测试、演示或其他证据判断是否满足。
-      placeholder: |
-        - [ ] 在……条件下，系统应……
-        - [ ] 当……发生时，应……
-    validations:
-      required: true
-
-  - type: textarea
-    id: constraints
-    attributes:
-      label: 已知约束与依赖
-      description: 记录已知限制、依赖、兼容性要求或时间约束；未知项请明确写“待调查”。
-      placeholder: 尚未确认的内容不要猜测。
-    validations:
-      required: false
-
-  - type: textarea
-    id: references
-    attributes:
-      label: 参考资料与证据
-      description: 可填写相关链接、截图说明、现有行为记录或来源。注明资料能证明什么。
+      label: What you do instead today / 目前的替代做法
     validations:
       required: false

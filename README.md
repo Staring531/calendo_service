@@ -1,52 +1,50 @@
-# memrepo Development
+# Calendo
 
-## Purpose
+[中文版](README.zh.md)
 
-This project tracks software development tasks for the memrepo repository.
+Holiday and working-day answers for AI agents, with every date's source stated.
 
-GitHub Issues are the primary records for requirements, defects, and technical investigations. GitHub Projects is used to track task status and development progress.
+Calendo answers the date questions a model should not guess: is 2025-10-11 a working day in China,
+what is the third working day after 2025-09-26, how many working days fall between 2025-09-29 and
+2025-10-12, which long breaks does 2026 have. Each answer carries the day's type (statutory
+holiday, shifted rest day, adjusted workday, weekend or workday), how well its data is verified,
+and the version of the data it came from.
 
-## Task Types
+## Status
 
-- Feature: New requirements or capabilities.
-- Bug: Defects and unexpected behavior.
-- Investigation: Technical questions requiring evidence-based investigation.
-- Chore: Engineering maintenance.
-- Docs: Documentation changes.
+Calendo has not been released, and no answers are implemented yet. This repository holds the
+engineering baseline (checks, CI, the release workflow, the changelog and RFC formats) and the
+[product background](docs/product/calendo-mvp.zh.md) the MVP is built from.
 
-## Status Definitions
+The MVP is planned as three layers over one Python core:
 
-| Status | Description |
-|---|---|
-| Backlog | Recorded but not yet being processed |
-| Clarifying | Requirement details need clarification |
-| Investigating | Facts and evidence are being collected |
-| Designing | Solutions and technical decisions are being evaluated |
-| Ready | Definition of Ready is satisfied and implementation is approved |
-| In Progress | Approved implementation is underway |
-| Verifying | Implementation is complete and verification is in progress |
-| Accepted | User has accepted the result |
-| Done | Delivery records are complete and the task is closed |
-| Blocked | Progress is prevented by an unresolved issue |
-| Rejected | User has explicitly decided not to proceed |
+| Layer | For | Planned |
+| --- | --- | --- |
+| MCP server | AI agents in Claude, Cursor and other MCP clients | A public remote endpoint with 7 read-only tools |
+| HTTP API | Developers and the site | 7 read-only endpoints under `/v1` |
+| calendo.day | Developers deciding whether to integrate | One page: connect a client, try a date, read how the data is checked |
 
-## Workflow Rules
+China comes first, checked day by day against the State Council's holiday notices. Other countries
+answer through the same tools from the [holidays](https://github.com/vacanza/holidays) library and
+are marked unverified until they are checked. The service makes no network call to answer.
 
-1. Every development task should have an Issue.
-2. Every Issue should be associated with this Project.
-3. A task must satisfy Definition of Ready before implementation.
-4. Implementation must remain within the approved scope.
-5. Verification must be recorded before acceptance.
-6. Only the user can approve important decisions and final acceptance.
-7. Blocked tasks must document the blocking reason and recovery conditions.
-8. Rejected tasks must document the decision and its rationale.
-9. Closing an Issue does not independently establish user acceptance.
+## Development
 
-## Source of Truth
+```sh
+uv sync
+sh scripts/check.sh
+```
 
-- Issue: Requirement, defect, investigation, and acceptance information.
-- Project: Task status and progress.
-- Pull Request: Code changes and review evidence.
-- GitHub Actions: Automated verification results.
+[CONTRIBUTING](.github/CONTRIBUTING.md) covers the setup, the checks, the working rules and how a
+change ships. Coding agents start at [AGENTS.md](AGENTS.md).
 
-Avoid duplicating the same information across multiple fields or records.
+| Read | For |
+| --- | --- |
+| [Product background](docs/product/calendo-mvp.zh.md) | What the MVP is, and the questions still open |
+| [Design RFCs](rfcs/README.md) | Decisions later work builds on |
+| [Changelog](CHANGELOG.md) | What shipped, release by release |
+| [Security policy](.github/SECURITY.md) | How to report a vulnerability |
+
+## License
+
+[MIT](LICENSE)

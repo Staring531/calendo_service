@@ -1,0 +1,9 @@
+# LF in the repository and in every working tree, so a Windows checkout formats and hashes the
+# same bytes as Linux CI.
+* text=auto eol=lf
+
+*.sh text eol=lf
+
+*.docx binary
+*.png binary
+*.webp binary
