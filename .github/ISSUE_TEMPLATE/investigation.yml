@@ -1,0 +1,56 @@
+name: "技术调查 / Investigation"
+description: "在实现前调查技术问题、未知条件、可选方案和决策依据。"
+title: "[调查] "
+body:
+  - type: markdown
+    attributes:
+      value: "调查结论应区分事实、推论和未知项，并记录可复核来源。"
+  - type: textarea
+    id: question
+    attributes:
+      label: 待回答的问题
+      description: 用明确问题说明本次调查要回答什么。
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: 调查原因与关联任务
+      description: 为什么需要调查？关联需求、缺陷或决策 Issue 请填写编号或链接。
+    validations:
+      required: true
+  - type: textarea
+    id: facts
+    attributes:
+      label: 已知事实与现有证据
+      description: 只记录已观察或由可信来源支持的内容，并附来源；没有时填写暂无。
+    validations:
+      required: true
+  - type: textarea
+    id: unknowns
+    attributes:
+      label: 未知项与待验证假设
+      description: 列出需要查证的条件，并标明暂时假设。
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: 调查范围与限制
+      description: 指明调查对象、比较维度、不可触碰范围或资源限制。
+    validations:
+      required: false
+  - type: textarea
+    id: output
+    attributes:
+      label: 预期调查产物
+      description: 例如事实与来源、实验记录、方案比较、建议及其限制。
+    validations:
+      required: true
+  - type: textarea
+    id: completion
+    attributes:
+      label: 调查完成条件
+      description: 什么证据足以回答问题，或决定进入方案设计？
+    validations:
+      required: true
