@@ -3,6 +3,7 @@
 - **Date:** 2026-11-05
 - **Type:** process
 - **Scope:** `docs`
+- **PR:** [#9](https://github.com/Staring531/calendo_service/pull/9)
 
 [English](2026-11-05-requirement-flow-rfc.md)
 

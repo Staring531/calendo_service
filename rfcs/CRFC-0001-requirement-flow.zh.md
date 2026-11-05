@@ -2,7 +2,7 @@
 
 - Status: draft
 - Start Date: 2026-11-05
-- RFC PR: [#N](https://github.com/Staring531/calendo_service/pull/N)
+- RFC PR: [#9](https://github.com/Staring531/calendo_service/pull/9)
 - Implementation PR: [#N](https://github.com/Staring531/calendo_service/pull/N)
 
 [English](CRFC-0001-requirement-flow.md)
