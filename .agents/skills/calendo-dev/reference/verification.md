@@ -1,12 +1,13 @@
 # Verification
 
-Loaded on demand from `SKILL.md`: what to run for what you changed, and how a check can pass
-without proving anything.
+The development flow in the root [`AGENTS.md`](../../../../AGENTS.md) says when to run these.
+This page is the table of what to run, and how a check can pass without proving anything.
 
 ## What to run
 
-`uv sync` first in a fresh checkout. The full chain is `sh scripts/check.sh`, the same commands CI
-runs. While you work, pick the narrowest evidence that would fail for this change's regression:
+`uv sync` first in a fresh checkout. `sh scripts/check.sh` runs the style, typecheck and test
+commands. CI also runs the package job and, on a pull request, the records job. While you work,
+pick the narrowest evidence that would fail for this change's regression:
 
 | Changed | Run |
 | --- | --- |

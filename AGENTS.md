@@ -1,27 +1,132 @@
 # AGENTS.md
 
-Calendo answers holiday and working-day questions for AI agents. One Python core is the only source
-of answers; an MCP server and a read-only HTTP API adapt it, and the site calls the HTTP API.
+## Project overview
 
-Read [`.agents/skills/calendo-dev/SKILL.md`](.agents/skills/calendo-dev/SKILL.md) before your first
-edit. It holds the conventions, the verification table and the record-and-ship contract, and
-points to a reference for each kind of task. The product background is
-[`docs/product/calendo-mvp.zh.md`](docs/product/calendo-mvp.zh.md).
+Calendo answers holiday and working-day questions for AI agents. It is a Python package
+(`src/calendo/`) with a core that computes every answer and adapters that expose it: an HTTP API
+and an MCP server. The package is pre-alpha: `src/calendo/` currently exposes `__version__` only.
+Product direction lives in `docs/product/`. Design decisions live in `rfcs/`.
 
-The rules that hold for every change:
+The nearest `AGENTS.md` wins when two of them disagree. The root file is the flow. The nested
+files are the rules for the directory they sit in. Long checklists (tests, what to run, a release,
+prose) stay in `.agents/skills/calendo-dev/reference/`. `.claude` links to `.agents`.
 
-1. **Requirements come from the product background, an issue or the owner.** Write down what you
-   will build as questions with their answers and each answer's source, and wait for the owner's
-   yes before you change behaviour they have not approved.
-2. **The service makes no network call at run time**, and no test reaches the network.
-3. **No date fact is typed into code or produced by a model.** It comes from the pinned
-   `holidays` version or a committed fixture that links its official source.
-4. **When the library, a fixture and an expected answer disagree, stop** and list the dates with
-   all three values. Which source wins is the owner's call.
-5. **Open design decisions go through an RFC** in `rfcs/`, in a pull request of their own, before
-   the code that depends on them.
-6. **Every change ships a changelog entry pair** in `changelog/unreleased/`, English and Chinese.
-7. **Branch and pull request against `main`, squash-merged.** Never push to `main`; never force-push
-   without the owner's yes.
-8. **Report what you ran and what it printed.** `sh scripts/check.sh` is the full chain CI runs.
-   What you did not run, say you did not run.
+## Setup commands
+
+- Install: `uv sync` (uv 0.11.32 or later in the 0.11 line; it installs the Python in
+  `.python-version`)
+- Full local chain: `sh scripts/check.sh` (style, typecheck and test; CI also builds the package
+  and, on a pull request, checks the changelog and RFC records)
+- Format: `uv run ruff format .`
+- Lint: `uv run ruff check --fix .`
+- Typecheck: `uv run pyright`
+- Test: `uv run pytest`, or one file: `uv run pytest tests/tooling/test_check_changelog.py`
+
+## Repository layout
+
+| Path | Holds |
+| --- | --- |
+| `src/calendo/` | The package |
+| `tests/` | pytest suites; `tests/tooling/` tests the repository checks |
+| `scripts/` | `check_changelog.py`, `check_rfcs.py`, `check_release.py`, `check.sh` |
+| `changelog/` | One entry pair per change; `changelog/README.md` is the format |
+| `rfcs/` | Design RFCs; `rfcs/README.md` is the process and the index |
+| `docs/product/` | Product direction documents |
+| `.github/` | CI and release workflows, issue forms, PR template, `CONTRIBUTING.md` |
+
+Search inside the repository. When a path does not resolve, ask `git ls-files`.
+
+| When you change | Read |
+| --- | --- |
+| `src/calendo/` | [`src/calendo/AGENTS.md`](src/calendo/AGENTS.md) |
+| `tests/` | [`tests/AGENTS.md`](tests/AGENTS.md) |
+| `changelog/` | [`changelog/AGENTS.md`](changelog/AGENTS.md) |
+| `rfcs/` | [`rfcs/AGENTS.md`](rfcs/AGENTS.md) |
+| `docs/` | [`docs/AGENTS.md`](docs/AGENTS.md) |
+| `.github/` | [`.github/AGENTS.md`](.github/AGENTS.md) |
+
+## Development flow
+
+```mermaid
+flowchart TD
+  chat[Chat message or a file in the checkout] --> no[Does not raise a requirement]
+  issue[GitHub issue in this repository] --> whose{Owner opened it, or adopted it on the issue?}
+  whose -->|no| no
+  whose -->|yes| depends{Later work depends on an open choice?}
+  depends -->|yes| rfc[RFC pull request, Status draft, on its own]
+  rfc --> accepted[Owner merges it with Status accepted]
+  accepted --> branch[Branch from main]
+  depends -->|no| branch
+  branch --> change[Change plus a changelog pair, or the skip-changelog label]
+  change --> verify[Narrowest check, then scripts/check.sh]
+  verify --> ship[Commit and push this branch]
+  ship --> green[The ci job is green]
+  green --> merge[Squash-merge into main]
+  merge --> rel{An issue requests a release?}
+  rel -->|yes| tag[release branch, then the tag, then the release workflow]
+  rel -->|no| done[Done]
+```
+
+A requirement is a GitHub issue in this repository. The owner raises it by opening the issue, or
+by commenting on an issue an agent opened to adopt it. A chat message does not raise a
+requirement and does not adopt one. A file in the checkout, including anything under
+`docs/product/`, does not raise one either. The issue may quote the chat or the file, and it
+names the line it overrides. An agent does not implement an issue it opened until that comment
+is there.
+
+A merged RFC with `Status: draft` is still a draft. It does not change this flow and it does not
+authorise the implementation. The implementation that depends on a decision is a later pull
+request and cites the RFC by number.
+
+Once `sh scripts/check.sh` passes, commit and push the current branch. Say what you ran and what
+it printed, in the reply and in the pull request. A check you did not run did not pass. Never
+push to `main`. A force push still needs the owner's yes.
+
+Stop and ask the owner, instead of picking a side, when the library, a fixture and an expected
+answer disagree, when the change would upgrade `holidays`, or when the scope moves. The same list
+is under "Ask the owner first".
+
+## Testing instructions
+
+- How to write a test is in [`tests/AGENTS.md`](tests/AGENTS.md). What to run is in
+  `.agents/skills/calendo-dev/reference/verification.md`.
+- The jobs, the required `ci` check and the release order are in
+  [`.github/AGENTS.md`](.github/AGENTS.md).
+- The flow above is when `sh scripts/check.sh` runs. Report what you ran and what it printed.
+
+## Code style
+
+- Python 3.12 or later, pyright strict over `src/`, `scripts/` and `tests/`.
+- ruff, line length 100. The rule set is in `pyproject.toml`.
+- English for code, comments, error messages, test names, commits and pull requests. Chinese only
+  in `*.zh.md` files and in data such as `zh_CN` holiday names.
+
+## Changelog and RFCs
+
+- Every change adds an entry pair to `changelog/unreleased/`: `YYYY-MM-DD-<slug>.md` and
+  `YYYY-MM-DD-<slug>.zh.md`, in the same pull request. A change nobody reads or runs gets the
+  `skip-changelog` label instead.
+- A decision later work builds on goes into an RFC first, in its own pull request. Only the owner
+  accepts an RFC.
+- `scripts/check_changelog.py` and `scripts/check_rfcs.py` check both formats.
+
+## Pull requests
+
+- Branch from `main` as `feat/`, `fix/`, `data/`, `docs/` or `chore/<topic>`. One topic per pull
+  request.
+- Title the pull request as the squash commit: `feat(core): count working days across a range`.
+- Fill in `.github/PULL_REQUEST_TEMPLATE.md`, including the verification output.
+- Pull requests are squash-merged once `ci` is green. Never push to `main`.
+
+## Ask the owner first
+
+- Changing behaviour that no issue in this repository requests, or changing scope.
+- Accepting an RFC, cutting a release or pushing a tag.
+- Upgrading `holidays` or deciding between conflicting date sources.
+- Force-pushing, rewriting history, deleting a branch, changing repository settings or secrets.
+
+## Security
+
+- Report a vulnerability through the private advisory form linked in `.github/SECURITY.md`, not a
+  public issue.
+- Keep credentials, tokens and private data out of the diff, logs and screenshots.

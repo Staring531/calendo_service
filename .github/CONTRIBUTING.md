@@ -17,7 +17,7 @@ the repository works by. A security problem does not go in a public issue: the
 
 ```sh
 uv sync                     # the locked environment, in .venv/
-sh scripts/check.sh         # the full chain CI runs, on this machine
+sh scripts/check.sh         # style, typecheck and test; CI also builds and checks records
 
 uv run ruff format .        # format
 uv run ruff check --fix .   # lint
@@ -39,7 +39,7 @@ Pick the narrowest check that would fail for your change while you work, and run
 | `changelog/` | One entry pair per change, grouped by release. `changelog/README.md` is the format. |
 | `rfcs/` | Design RFCs, one decision per English/Chinese pair. |
 | `docs/product/` | The product background: what Calendo is for, and the open questions it started with. |
-| `.agents/skills/calendo-dev/` | The conventions a coding agent needs and gets wrong from outside. `.claude` links to `.agents`. |
+| `.agents/skills/calendo-dev/` | The index a coding agent follows, pointing at the root `AGENTS.md` and the nested ones. `.claude` links to `.agents`. |
 
 ## Quality gates
 
@@ -76,8 +76,11 @@ validated by exactly what a pull request is.
 - **A data change is one pull request**: the fixture, its source link, the tests that read it and
   a `Type: data` changelog entry land together. Upgrading `holidays` is a data change, which is
   why Dependabot leaves it alone.
-- **Decisions the product documents leave open go through an RFC** before the code that depends
-  on them. See below.
+- **A requirement is a GitHub issue in this repository.** The owner opens it, or comments on it
+  to adopt an issue an agent opened. A chat message and a file in the checkout do not raise one.
+- **A decision later work builds on goes through an RFC when an issue asks for it,** before the
+  code that depends on it. A product document may be cited. It does not raise the requirement.
+  See below.
 - **A pushed tag is never moved.** Release preparation is a pull request of its own; the
   [release reference](../.agents/skills/calendo-dev/reference/release.md) has the order.
 

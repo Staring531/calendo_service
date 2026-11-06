@@ -1,6 +1,7 @@
 # Writing tests: scenarios first, behaviour only
 
-Loaded on demand from `SKILL.md`. A test earns its place by failing when a promise to a caller
+The binding rules are in [`tests/AGENTS.md`](../../../../tests/AGENTS.md). This page is the
+checklist. A test earns its place by failing when a promise to a caller
 breaks, and by staying green through a refactor that keeps the promise. "2025-10-11 in CN is an
 adjusted workday" is a test. "`DEFAULT_LANG` equals `zh_CN`" is not: it restates the source and
 fails on every legitimate edit.

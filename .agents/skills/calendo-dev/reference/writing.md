@@ -1,7 +1,8 @@
 # Writing what a reader sees
 
-Loaded on demand from `SKILL.md`. It applies to the README, `docs/`, changelog prose, RFCs, PR
-bodies, error messages, and the MCP tool descriptions a model reads to decide which tool to call.
+Direction documents follow [`docs/AGENTS.md`](../../../../docs/AGENTS.md). This page is the prose
+checklist for the README, `docs/`, changelog prose, RFCs, pull request bodies, error messages, and
+the MCP tool descriptions a model reads to decide which tool to call.
 
 ## Every language
 
