@@ -59,7 +59,8 @@ uv run pytest tests/tooling/test_check_changelog.py   # 单个文件
 - **每个改动都附一对中英文变更日志条目**：在做出改动的同一个 pull request 中新增 `changelog/unreleased/YYYY-MM-DD-<slug>.md` 及其 `.zh.md`。格式见 [`changelog/README.zh.md`](../changelog/README.zh.md)，CI 会检查。没有人会读到或运行到的改动（注释里的错别字、工具升级）改为打上 `skip-changelog` 标签。
 - **日期事实都有来源。** Calendo 的回答来自固定版本的 [holidays](https://github.com/vacanza/holidays)，以及提交在仓库中的夹具；每份夹具都附有核对所依据的官方通知链接。日期从不由模型提供，服务运行时不发起任何网络调用。
 - **一次数据变更就是一个 pull request**：夹具、来源链接、读取它的测试，以及一条 `Type: data` 的变更日志条目一起合入。升级 `holidays` 属于数据变更，所以 Dependabot 不碰它。
-- **产品文档中留作待决的决定，先走 RFC**，再写依赖它的代码。见下文。
+- **需求就是本仓库的一条 GitHub issue。** 由所有者开出，或由所有者在 Agent 开出的 issue 上评论表示采纳。聊天消息和仓库里的文件都不能提出需求。
+- **后续工作要依赖的决定，由一条 issue 提出后先走 RFC**，再写依赖它的代码。产品文档可以被引用，它本身不提出需求。见下文。
 - **已推送的 tag 永不移动。** 发布准备单独走一个 pull request，顺序见[发布参考](../.agents/skills/calendo-dev/reference/release.md)。
 
 ## 设计 RFC

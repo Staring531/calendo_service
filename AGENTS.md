@@ -49,11 +49,10 @@ Search inside the repository. When a path does not resolve, ask `git ls-files`.
 
 ```mermaid
 flowchart TD
-  req[Request] --> approved{Behaviour already approved?}
-  approved -->|no| propose[Write the questions, the answers, and the source of each date fact]
-  propose --> wait[Wait for the owner's yes]
-  wait --> depends{Later work depends on an open choice?}
-  approved -->|yes| depends
+  chat[Chat message or a file in the checkout] --> no[Does not raise a requirement]
+  issue[GitHub issue in this repository] --> whose{Owner opened it, or adopted it on the issue?}
+  whose -->|no| no
+  whose -->|yes| depends{Later work depends on an open choice?}
   depends -->|yes| rfc[RFC pull request, Status draft, on its own]
   rfc --> accepted[Owner merges it with Status accepted]
   accepted --> branch[Branch from main]
@@ -63,14 +62,17 @@ flowchart TD
   verify --> ship[Commit and push this branch]
   ship --> green[The ci job is green]
   green --> merge[Squash-merge into main]
-  merge --> rel{Owner asked for a release?}
+  merge --> rel{An issue requests a release?}
   rel -->|yes| tag[release branch, then the tag, then the release workflow]
   rel -->|no| done[Done]
 ```
 
-A product document or an issue can supply the wording of the proposal. Neither replaces the
-owner's yes for behaviour the owner has not approved. When the owner's later words conflict with
-a document, the owner's words win; say which line they override.
+A requirement is a GitHub issue in this repository. The owner raises it by opening the issue, or
+by commenting on an issue an agent opened to adopt it. A chat message does not raise a
+requirement and does not adopt one. A file in the checkout, including anything under
+`docs/product/`, does not raise one either. The issue may quote the chat or the file, and it
+names the line it overrides. An agent does not implement an issue it opened until that comment
+is there.
 
 A merged RFC with `Status: draft` is still a draft. It does not change this flow and it does not
 authorise the implementation. The implementation that depends on a decision is a later pull
@@ -118,7 +120,7 @@ is under "Ask the owner first".
 
 ## Ask the owner first
 
-- Changing behaviour the owner has not approved, or changing scope.
+- Changing behaviour that no issue in this repository requests, or changing scope.
 - Accepting an RFC, cutting a release or pushing a tag.
 - Upgrading `holidays` or deciding between conflicting date sources.
 - Force-pushing, rewriting history, deleting a branch, changing repository settings or secrets.

@@ -76,8 +76,11 @@ validated by exactly what a pull request is.
 - **A data change is one pull request**: the fixture, its source link, the tests that read it and
   a `Type: data` changelog entry land together. Upgrading `holidays` is a data change, which is
   why Dependabot leaves it alone.
-- **Decisions the product documents leave open go through an RFC** before the code that depends
-  on them. See below.
+- **A requirement is a GitHub issue in this repository.** The owner opens it, or comments on it
+  to adopt an issue an agent opened. A chat message and a file in the checkout do not raise one.
+- **A decision later work builds on goes through an RFC when an issue asks for it,** before the
+  code that depends on it. A product document may be cited. It does not raise the requirement.
+  See below.
 - **A pushed tag is never moved.** Release preparation is a pull request of its own; the
   [release reference](../.agents/skills/calendo-dev/reference/release.md) has the order.
 

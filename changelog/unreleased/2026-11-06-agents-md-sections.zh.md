@@ -11,7 +11,7 @@
 ## 细节
 
 - 根文件把方向文档写成 `docs/product/` 目录。它写明包还处在 pre-alpha，`src/calendo/` 目前只暴露 `__version__`。
-- 开发流程图覆盖：请求、所有者的确认、后续工作依赖某个选择时的 RFC、分支、changelog 一对文件、`scripts/check.sh`、推送、`ci` 检查、squash merge，以及所有者要求发版时的发布。
+- 开发流程图从本仓库的一条 GitHub issue 开始。所有者开出这条 issue，或在 Agent 开出的 issue 上评论表示采纳。聊天消息和仓库里的文件都不能提出需求。图中随后覆盖：后续工作依赖某个选择时的 RFC、分支、changelog 一对文件、`scripts/check.sh`、推送、`ci` 检查、squash merge，以及一条 issue 要求发版时的发布。
 - 为 `src/calendo/`（日期事实）、`tests/`、`changelog/`、`rfcs/`、`docs/`、`.github/` 各加了一份 `AGENTS.md`。每份都写明根文件仍然适用，冲突时以更近的那份为准。
 - `scripts/check_rfcs.py` 把 `rfcs/AGENTS.md` 与 README、模板一样，视为非 RFC 文件。
 - `.agents/skills/calendo-dev/SKILL.md` 不再复述流程、日期事实规则和仓库结构。它改为指向这些 `AGENTS.md` 和 `reference/` 下的检查清单。

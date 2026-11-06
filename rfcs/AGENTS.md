@@ -8,10 +8,10 @@ The root [AGENTS.md](../AGENTS.md) applies here too. On a conflict, this file wi
 
 - One decision per pair: `CRFC-NNNN-<slug>.md` and `.zh.md`. Take the next number after the last
   index row, and add the row in the same pull request.
-- Open an RFC when a change needs a choice later work builds on: the shape of an answer, a data
-  source, a framework, the deployment, how a wrong date gets corrected. The open questions in
-  `docs/product/` are where the first ones come from. An agent may draft an RFC. Accepting it is
-  the owner's call, and an agent never sets `Status: accepted`.
+- Open an RFC when an issue asks for a choice later work builds on: the shape of an answer, a
+  data source, a framework, the deployment, how a wrong date gets corrected. Open questions in
+  `docs/product/` are background the issue may cite. They do not raise the RFC. An agent may
+  draft an RFC. Accepting it is the owner's call, and an agent never sets `Status: accepted`.
 - The RFC and the implementation it decides are different pull requests. The implementation cites
   the RFC by number.
 - `Status: draft` does not authorise implementation, including a draft that has already merged.
