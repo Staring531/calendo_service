@@ -50,9 +50,12 @@ Search inside the repository. When a path does not resolve, ask `git ls-files`.
 ```mermaid
 flowchart TD
   chat[Chat message or a file in the checkout] --> no[Does not raise a requirement]
-  issue[GitHub issue in this repository] --> whose{Owner opened it, or adopted it on the issue?}
+  issue[GitHub issue in this repository] --> whose{Owner opened it, or a line Adopted is on it?}
   whose -->|no| no
-  whose -->|yes| depends{Later work depends on an open choice?}
+  whose -->|yes| unit{One pull request can deliver it?}
+  unit -->|no| split[Agent opens one sub-issue per story. The parent stays open]
+  split --> issue
+  unit -->|yes| depends{Later work depends on an open choice?}
   depends -->|yes| rfc[RFC pull request, Status draft, on its own]
   rfc --> accepted[Owner merges it with Status accepted]
   accepted --> branch[Branch from main]
@@ -67,12 +70,20 @@ flowchart TD
   rel -->|no| done[Done]
 ```
 
-A requirement is a GitHub issue in this repository. The owner raises it by opening the issue, or
-by commenting on an issue an agent opened to adopt it. A chat message does not raise a
-requirement and does not adopt one. A file in the checkout, including anything under
-`docs/product/`, does not raise one either. The issue may quote the chat or the file, and it
-names the line it overrides. An agent does not implement an issue it opened until that comment
-is there.
+A requirement is a GitHub issue in this repository. The owner raises it by opening the issue.
+An issue an agent opened counts when the owner comments a line whose only text is `Adopted`.
+A chat message does not raise a requirement and does not adopt one. A file in the checkout,
+including anything under `docs/product/`, does not raise one either. The issue may quote the
+chat or the file, and it names the line it overrides.
+
+A story is one issue a single pull request can deliver. It states the behaviour a caller can
+observe, what it leaves out, the source of every date fact or the gap, and the checks that show
+it is done without reading the code. A request that fails that test is a parent. The agent opens
+its sub-issues. The parent is not implemented and is not closed while a child is open. A child
+waits for the same adoption before work starts.
+
+The `records` job rejects a pull request that does not close exactly one adopted issue with no
+open sub-issues. The labels `skip-changelog` and `dependencies` skip that check.
 
 A merged RFC with `Status: draft` is still a draft. It does not change this flow and it does not
 authorise the implementation. The implementation that depends on a decision is a later pull

@@ -135,6 +135,11 @@ jobs:
         env:
           BASE_REF: ${{ github.base_ref }}
         run: uv run python scripts/check_rfcs.py --base "origin/$BASE_REF"
+      - name: The pull request closes one adopted leaf issue
+        if: github.event_name == 'pull_request' && !contains(github.event.pull_request.labels.*.name, 'skip-changelog') && !contains(github.event.pull_request.labels.*.name, 'dependencies')
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: uv run python scripts/check_requirement.py --event "$GITHUB_EVENT_PATH"
       - name: Nothing to compare outside a pull request
         if: github.event_name != 'pull_request'
         run: echo "${{ github.event_name }} event; records are checked on pull requests."
