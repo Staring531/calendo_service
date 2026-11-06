@@ -13,7 +13,7 @@
 
 ```sh
 uv sync                     # 按锁文件安装环境到 .venv/
-sh scripts/check.sh         # 在本机跑一遍 CI 的完整检查链
+sh scripts/check.sh         # 格式、类型检查和测试；CI 另外还会构建，并在 pull request 上检查记录
 
 uv run ruff format .        # 格式化
 uv run ruff check --fix .   # lint
@@ -34,7 +34,7 @@ uv run pytest tests/tooling/test_check_changelog.py   # 单个文件
 | `changelog/` | 每个改动一对条目，按版本分组。格式见 `changelog/README.zh.md`。 |
 | `rfcs/` | 设计 RFC，每个决定一对中英文文档。 |
 | `docs/product/` | 产品背景：Calendo 做什么，以及起步时留下的待决问题。 |
-| `.agents/skills/calendo-dev/` | 编码 Agent 需要知道、从外部又容易弄错的约定。`.claude` 链接到 `.agents`。 |
+| `.agents/skills/calendo-dev/` | 编码 Agent 的索引，指向根目录 `AGENTS.md` 和各层嵌套的 `AGENTS.md`。`.claude` 链接到 `.agents`。 |
 
 ## 质量关卡
 

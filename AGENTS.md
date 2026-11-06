@@ -4,18 +4,19 @@
 
 Calendo answers holiday and working-day questions for AI agents. It is a Python package
 (`src/calendo/`) with a core that computes every answer and adapters that expose it: an HTTP API
-and an MCP server. Product direction lives in `docs/product/`; design decisions live in `rfcs/`.
+and an MCP server. The package is pre-alpha: `src/calendo/` currently exposes `__version__` only.
+Product direction lives in `docs/product/`. Design decisions live in `rfcs/`.
 
-Domain rules (where date facts come from, test scenarios, changelog traps, releases) are in
-[`.agents/skills/calendo-dev/SKILL.md`](.agents/skills/calendo-dev/SKILL.md). Read it before you
-change code, tests, date data, a changelog entry, an RFC or a workflow. `.claude` links to
-`.agents`.
+The nearest `AGENTS.md` wins when two of them disagree. The root file is the flow. The nested
+files are the rules for the directory they sit in. Long checklists (tests, what to run, a release,
+prose) stay in `.agents/skills/calendo-dev/reference/`. `.claude` links to `.agents`.
 
 ## Setup commands
 
 - Install: `uv sync` (uv 0.11.32 or later in the 0.11 line; it installs the Python in
   `.python-version`)
-- Full check, the same chain CI runs: `sh scripts/check.sh`
+- Full local chain: `sh scripts/check.sh` (style, typecheck and test; CI also builds the package
+  and, on a pull request, checks the changelog and RFC records)
 - Format: `uv run ruff format .`
 - Lint: `uv run ruff check --fix .`
 - Typecheck: `uv run pyright`
@@ -35,15 +36,61 @@ change code, tests, date data, a changelog entry, an RFC or a workflow. `.claude
 
 Search inside the repository. When a path does not resolve, ask `git ls-files`.
 
+| When you change | Read |
+| --- | --- |
+| `src/calendo/` | [`src/calendo/AGENTS.md`](src/calendo/AGENTS.md) |
+| `tests/` | [`tests/AGENTS.md`](tests/AGENTS.md) |
+| `changelog/` | [`changelog/AGENTS.md`](changelog/AGENTS.md) |
+| `rfcs/` | [`rfcs/AGENTS.md`](rfcs/AGENTS.md) |
+| `docs/` | [`docs/AGENTS.md`](docs/AGENTS.md) |
+| `.github/` | [`.github/AGENTS.md`](.github/AGENTS.md) |
+
+## Development flow
+
+```mermaid
+flowchart TD
+  req[Request] --> approved{Behaviour already approved?}
+  approved -->|no| propose[Write the questions, the answers, and the source of each date fact]
+  propose --> wait[Wait for the owner's yes]
+  wait --> depends{Later work depends on an open choice?}
+  approved -->|yes| depends
+  depends -->|yes| rfc[RFC pull request, Status draft, on its own]
+  rfc --> accepted[Owner merges it with Status accepted]
+  accepted --> branch[Branch from main]
+  depends -->|no| branch
+  branch --> change[Change plus a changelog pair, or the skip-changelog label]
+  change --> verify[Narrowest check, then scripts/check.sh]
+  verify --> ship[Commit and push this branch]
+  ship --> green[The ci job is green]
+  green --> merge[Squash-merge into main]
+  merge --> rel{Owner asked for a release?}
+  rel -->|yes| tag[release branch, then the tag, then the release workflow]
+  rel -->|no| done[Done]
+```
+
+A product document or an issue can supply the wording of the proposal. Neither replaces the
+owner's yes for behaviour the owner has not approved. When the owner's later words conflict with
+a document, the owner's words win; say which line they override.
+
+A merged RFC with `Status: draft` is still a draft. It does not change this flow and it does not
+authorise the implementation. The implementation that depends on a decision is a later pull
+request and cites the RFC by number.
+
+Once `sh scripts/check.sh` passes, commit and push the current branch. Say what you ran and what
+it printed, in the reply and in the pull request. A check you did not run did not pass. Never
+push to `main`. A force push still needs the owner's yes.
+
+Stop and ask the owner, instead of picking a side, when the library, a fixture and an expected
+answer disagree, when the change would upgrade `holidays`, or when the scope moves. The same list
+is under "Ask the owner first".
+
 ## Testing instructions
 
-- CI is `.github/workflows/ci.yml`. The one required check is the aggregate `ci` job.
-- Tests run on Python 3.12 and 3.14 with sockets disabled (pytest-socket). A test that needs the
-  network is wrong.
-- While you work, run the narrowest check that would fail for your change. The table is in
+- How to write a test is in [`tests/AGENTS.md`](tests/AGENTS.md). What to run is in
   `.agents/skills/calendo-dev/reference/verification.md`.
-- Run `sh scripts/check.sh` before you ask for review.
-- Report what you ran and what it printed. Say which checks you did not run.
+- The jobs, the required `ci` check and the release order are in
+  [`.github/AGENTS.md`](.github/AGENTS.md).
+- The flow above is when `sh scripts/check.sh` runs. Report what you ran and what it printed.
 
 ## Code style
 

@@ -1,6 +1,7 @@
 """Design RFCs, as an RFC pull request and a later revision of it read them.
 
 - Given a well-formed English/Chinese pair, the folder reads clean and the pair is counted.
+- Given README, TEMPLATE and AGENTS.md beside that pair, the folder still reads clean.
 - Given a name outside CRFC-NNNN-<slug>, a missing half, or two RFCs on one number, each is named.
 - Given an English RFC without one of the required sections, the missing section is named.
 - Given an unknown Status, or halves whose Status or section count disagree, the pair is refused.
@@ -20,6 +21,13 @@ from check_rfcs import check_dir, check_revisions, main
 
 def test_a_well_formed_pair_reads_clean_and_is_counted(tmp_path: Path) -> None:
     assert check_dir(write_rfc(tmp_path / "rfcs")) == (1, [])
+
+
+def test_readme_template_and_agents_md_beside_a_pair_read_clean(tmp_path: Path) -> None:
+    folder = write_rfc(tmp_path / "rfcs")
+    for name in ("README.md", "README.zh.md", "TEMPLATE.md", "TEMPLATE.zh.md", "AGENTS.md"):
+        (folder / name).write_text("# kept\n", encoding="utf-8")
+    assert check_dir(folder) == (1, [])
 
 
 def test_a_name_a_missing_half_and_a_reused_number_are_each_named(tmp_path: Path) -> None:

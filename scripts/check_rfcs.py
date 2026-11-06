@@ -18,7 +18,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 RFC_DIR = "rfcs"
-NON_RFCS = frozenset({"README.md", "README.zh.md", "TEMPLATE.md", "TEMPLATE.zh.md"})
+# AGENTS.md is the directory rule for agents. It is not an RFC and has no Chinese pair.
+NON_RFCS = frozenset({"README.md", "README.zh.md", "TEMPLATE.md", "TEMPLATE.zh.md", "AGENTS.md"})
 
 RFC_NAME = re.compile(r"^CRFC-(?P<num>\d{4})-[a-z0-9]+(?:-[a-z0-9]+)*(?P<zh>\.zh)?\.md$")
 STATUS_LINE = re.compile(r"^- Status: (?P<status>\S+)\s*$", re.MULTILINE)
