@@ -76,8 +76,11 @@ validated by exactly what a pull request is.
 - **A data change is one pull request**: the fixture, its source link, the tests that read it and
   a `Type: data` changelog entry land together. Upgrading `holidays` is a data change, which is
   why Dependabot leaves it alone.
-- **A requirement is a GitHub issue in this repository.** The owner opens it, or comments on it
-  to adopt an issue an agent opened. A chat message and a file in the checkout do not raise one.
+- **A requirement is a GitHub issue in this repository.** The owner opens it. An issue an agent
+  opened counts when the owner comments a line whose only text is `Adopted`. A request one pull
+  request cannot deliver is a parent: the agent opens one sub-issue per story, and the parent
+  stays open. CI rejects a pull request that does not close exactly one adopted issue with no
+  open sub-issues. `skip-changelog` and `dependencies` skip that check.
 - **A decision later work builds on goes through an RFC when an issue asks for it,** before the
   code that depends on it. A product document may be cited. It does not raise the requirement.
   See below.
