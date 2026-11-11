@@ -3,7 +3,7 @@
 - **Date:** 2026-11-06
 - **Type:** process
 - **Scope:** `ci`, `docs`, `tooling`
-- **PR:** [#12](https://github.com/Staring531/calendo_service/pull/12)
+- **PR:** [#12](https://github.com/Staring531/calendo_service/pull/12), [#14](https://github.com/Staring531/calendo_service/pull/14)
 - **Issue:** [#11](https://github.com/Staring531/calendo_service/issues/11), [#13](https://github.com/Staring531/calendo_service/issues/13)
 
 [中文版](2026-11-06-adopted-leaf-issue.zh.md)
