@@ -32,6 +32,7 @@ prose) stay in `.agents/skills/calendo-dev/reference/`. `.claude` links to `.age
 | `changelog/` | One entry pair per change; `changelog/README.md` is the format |
 | `rfcs/` | Design RFCs; `rfcs/README.md` is the process and the index |
 | `docs/product/` | Product direction documents |
+| `docs/github/` | The ruleset, the project board, and the workflows, as last read from GitHub |
 | `.github/` | CI and release workflows, issue forms, PR template, `CONTRIBUTING.md` |
 
 Search inside the repository. When a path does not resolve, ask `git ls-files`.
@@ -78,9 +79,26 @@ chat or the file, and it names the line it overrides.
 
 A story is one issue a single pull request can deliver. It states the behaviour a caller can
 observe, what it leaves out, the source of every date fact or the gap, and the checks that show
-it is done without reading the code. A request that fails that test is a parent. The agent opens
-its sub-issues. The parent is not implemented and is not closed while a child is open. A child
-waits for the same adoption before work starts.
+it is done without reading the code. A request that fails that test is a parent. The agent cuts
+it into stories before opening sub-issues, in this order:
+
+1. List every behaviour a caller can observe, one line each. A directory, a layer, or a phase is
+   not a line.
+2. A line that depends on an open choice becomes an RFC issue. The behaviour waits until that RFC
+   is merged with `Status: accepted`.
+3. A line whose date facts come from their own source becomes its own story.
+4. Two lines share a story only when a caller cannot observe them apart and one pull request can
+   hold both checks.
+5. Write the four statements on each story. A line that cannot fill them is split again.
+6. Order the stories so each one's checks run after the stories it needs. The first runs on
+   current `main`.
+7. The agent opens one sub-issue per story and writes the four statements. The parent lists them
+   and stays open. The owner does not open the children.
+
+The worked cut is in
+[`docs/github/configuration.md`](docs/github/configuration.md#splitting-a-topic-into-stories). The
+parent is not implemented and is not closed while a child is open. Work on a child starts when
+the owner comments a line `Adopted` on it.
 
 The `records` job rejects a pull request that does not close exactly one adopted issue with no
 open sub-issues. The labels `skip-changelog` and `dependencies` skip that check.

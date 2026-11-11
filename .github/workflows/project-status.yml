@@ -1,5 +1,6 @@
 # Move the project card from the event. cursor-cf cannot edit the project.
-# PROJECT_TOKEN is a fine-grained PAT of Staring531 with access to the user project.
+# PROJECT_TOKEN is a classic PAT of Staring531 with the project scope.
+# A fine-grained token has no Projects permission for a user-owned project.
 # A missing secret warns and exits 0; this workflow is not a required check.
 name: Project status
 

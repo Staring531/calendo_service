@@ -6,8 +6,8 @@ body:
   - type: markdown
     attributes:
       value: |
-        A request one pull request cannot deliver becomes a parent. The agent may open one sub-issue per story. Work starts when the owner opens the issue, or comments a line `Adopted` on an issue the agent opened. The parent stays open.
-        一个 pull request 做不完的请求成为父 issue。Agent 可以为每个 story 开一条子 issue。所有者开出 issue，或在 Agent 开出的 issue 上评论单独一行 `Adopted`，工作才能开始。父 issue 保持打开。
+        A request one pull request cannot deliver becomes a parent. The agent cuts it into stories and opens each sub-issue. A story states the behaviour a caller can observe, what it leaves out, the source of every date fact or the gap, and the checks that show it is done without reading the code. Work starts when the owner comments a line `Adopted` on that sub-issue. The parent stays open.
+        一个 pull request 做不完的请求成为父 issue。Agent 把它切成 story，并自己开每一条子 issue。一张 story 写明调用方能看到的行为、范围外的内容、每个日期事实的来源或缺口，以及不看代码就能核对的完成标准。所有者在该子 issue 上评论单独一行 `Adopted`，工作才开始。父 issue 保持打开。
 
   - type: textarea
     id: problem
