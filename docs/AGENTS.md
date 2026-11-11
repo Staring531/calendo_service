@@ -10,3 +10,9 @@ leads to a draft RFC.
 
 Write the documents for a reader who has not seen the code. Prose rules for English and Chinese
 are in [`.agents/skills/calendo-dev/reference/writing.md`](../.agents/skills/calendo-dev/reference/writing.md).
+
+## GitHub settings
+
+[`github/configuration.md`](github/configuration.md) records the ruleset, the project board, and
+the workflows. Those settings also live on GitHub. A change to a switch there updates the page in
+the same pull request. The page does not raise a requirement.
