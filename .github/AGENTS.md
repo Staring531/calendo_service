@@ -4,6 +4,8 @@ The root [AGENTS.md](../AGENTS.md) applies here too. On a conflict, this file wi
 
 ## CI and release
 
+- The ruleset, the project board, and each workflow trigger are written out in
+  [`docs/github/configuration.md`](../docs/github/configuration.md).
 - `.github/workflows/ci.yml` runs on every pull request and every push to `main`. The ruleset
   `project-main` on the default branch requires a pull request, one approving review, and the
   aggregate `ci` job. `ci` fails unless `style`, `typecheck`, `test`, `package` and `records`

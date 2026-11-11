@@ -34,6 +34,7 @@ uv run pytest tests/tooling/test_check_changelog.py   # 单个文件
 | `changelog/` | 每个改动一对条目，按版本分组。格式见 `changelog/README.zh.md`。 |
 | `rfcs/` | 设计 RFC，每个决定一对中英文文档。 |
 | `docs/product/` | 产品背景：Calendo 做什么，以及起步时留下的待决问题。 |
+| `docs/github/` | 规则集、看板和 workflow，以最近一次从 GitHub 读到的内容为准。 |
 | `.agents/skills/calendo-dev/` | 编码 Agent 的索引，指向根目录 `AGENTS.md` 和各层嵌套的 `AGENTS.md`。`.claude` 链接到 `.agents`。 |
 
 ## 质量关卡
@@ -46,7 +47,7 @@ uv run pytest tests/tooling/test_check_changelog.py   # 单个文件
 | `typecheck` | 对 `src/`、`scripts/`、`tests/` 的 pyright 严格模式检查 |
 | `test` | 在 Python 3.12 与 3.14 上运行 pytest，统计分支覆盖率；套接字禁用，任何测试都碰不到网络 |
 | `package` | `uv build`、wheel 的内容，以及安装后的 wheel 报出的版本与 `pyproject.toml` 一致 |
-| `records` | 仅 pull request：分支新增了变更日志条目对；已落地的 RFC 若有修改，版本号已提升 |
+| `records` | 仅 pull request：一对变更日志、已落地 RFC 的版本号，以及恰好一条已采纳的叶子 issue。`skip-changelog` 跳过条目对和 issue 检查。`dependencies` 跳过 issue 检查 |
 | `ci` | 上面任何一个 job 没有成功就失败。分支保护只要求这一项检查。 |
 
 没有覆盖率门槛。改动新增一个分支，就要新增走到这个分支的场景。
@@ -59,7 +60,7 @@ uv run pytest tests/tooling/test_check_changelog.py   # 单个文件
 - **每个改动都附一对中英文变更日志条目**：在做出改动的同一个 pull request 中新增 `changelog/unreleased/YYYY-MM-DD-<slug>.md` 及其 `.zh.md`。格式见 [`changelog/README.zh.md`](../changelog/README.zh.md)，CI 会检查。没有人会读到或运行到的改动（注释里的错别字、工具升级）改为打上 `skip-changelog` 标签。
 - **日期事实都有来源。** Calendo 的回答来自固定版本的 [holidays](https://github.com/vacanza/holidays)，以及提交在仓库中的夹具；每份夹具都附有核对所依据的官方通知链接。日期从不由模型提供，服务运行时不发起任何网络调用。
 - **一次数据变更就是一个 pull request**：夹具、来源链接、读取它的测试，以及一条 `Type: data` 的变更日志条目一起合入。升级 `holidays` 属于数据变更，所以 Dependabot 不碰它。
-- **需求就是本仓库的一条 GitHub issue。** 由所有者开出。Agent 开出的 issue，要所有者评论单独一行 `Adopted` 才算数。一个 pull request 做不完的请求是父 issue：Agent 为每个 story 开一条子 issue，父 issue 保持打开。CI 拒绝没有关闭恰好一条已采纳、且没有未关闭子 issue 的 pull request。`skip-changelog` 和 `dependencies` 跳过这项检查。
+- **需求就是本仓库的一条 GitHub issue。** 由所有者开出。Agent 开出的 issue，要所有者评论单独一行 `Adopted` 才算数。一个 pull request 做不完的请求是父 issue：Agent 按 [`AGENTS.md`](../AGENTS.md) 的七步把它切成 story，每张 story 一条子 issue，父 issue 保持打开。切割标准写在 [`docs/github/configuration.zh.md`](../docs/github/configuration.zh.md#把一个-topic-拆成-story)。CI 拒绝没有关闭恰好一条已采纳、且没有未关闭子 issue 的 pull request。`skip-changelog` 和 `dependencies` 跳过这项检查。
 - **后续工作要依赖的决定，由一条 issue 提出后先走 RFC**，再写依赖它的代码。产品文档可以被引用，它本身不提出需求。见下文。
 - **已推送的 tag 永不移动。** 发布准备单独走一个 pull request，顺序见[发布参考](../.agents/skills/calendo-dev/reference/release.md)。
 
@@ -84,7 +85,7 @@ uv run pytest tests/tooling/test_check_changelog.py   # 单个文件
 
 这些设置在 GitHub 的设置页里，不在文件中，由所有者设置一次：
 
-- **`main` 的分支保护**：必须经 pull request，必须通过 `ci` 状态检查，只允许 squash 合并，禁止强制推送和删除。只有一位维护者期间，不要求审批。
+- **`main` 上的规则集 `project-main`**：必须经 pull request，必须有一次批准，必须通过 `ci`，只允许 squash 合并。禁止强制推送和删除。管理员不能绕过。当时读到的设置、看板和 workflow 触发条件见 [`docs/github/configuration.zh.md`](../docs/github/configuration.zh.md)。
 - **标签**，供表单、Dependabot 和 CI 使用：`type:feature`、`type:bug`、`type:data`、`type:investigation`、`type:chore`、`type:docs`、`dependencies`、`skip-changelog`。表单只会打上已经存在的标签。
 - **私密漏洞报告**（Security 设置下），安全策略里的报告表单依赖它。
 - **Actions**：workflow 权限默认只读。发布 job 自行申请 `contents: write`。

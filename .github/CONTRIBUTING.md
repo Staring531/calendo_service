@@ -39,6 +39,7 @@ Pick the narrowest check that would fail for your change while you work, and run
 | `changelog/` | One entry pair per change, grouped by release. `changelog/README.md` is the format. |
 | `rfcs/` | Design RFCs, one decision per English/Chinese pair. |
 | `docs/product/` | The product background: what Calendo is for, and the open questions it started with. |
+| `docs/github/` | The ruleset, the project board, and the workflows, as last read from GitHub. |
 | `.agents/skills/calendo-dev/` | The index a coding agent follows, pointing at the root `AGENTS.md` and the nested ones. `.claude` links to `.agents`. |
 
 ## Quality gates
@@ -51,7 +52,7 @@ Every pull request and every push to `main` runs `.github/workflows/ci.yml`:
 | `typecheck` | pyright in strict mode over `src/`, `scripts/` and `tests/` |
 | `test` | pytest on Python 3.12 and 3.14, with branch coverage, and sockets disabled so no test reaches the network |
 | `package` | `uv build`, the wheel's contents, and that the installed wheel reports the version `pyproject.toml` declares |
-| `records` | Pull requests only: the branch adds a changelog entry pair, and an RFC that changed after landing raised its version |
+| `records` | Pull requests only: a changelog pair, an RFC revision that raises its version, and exactly one adopted leaf issue. `skip-changelog` skips the pair and the issue check. `dependencies` skips the issue check |
 | `ci` | Fails unless every job above succeeded. This is the one check branch protection requires. |
 
 There is no coverage threshold. A change that adds a branch adds the scenario that takes it.
@@ -78,9 +79,12 @@ validated by exactly what a pull request is.
   why Dependabot leaves it alone.
 - **A requirement is a GitHub issue in this repository.** The owner opens it. An issue an agent
   opened counts when the owner comments a line whose only text is `Adopted`. A request one pull
-  request cannot deliver is a parent: the agent opens one sub-issue per story, and the parent
-  stays open. CI rejects a pull request that does not close exactly one adopted issue with no
-  open sub-issues. `skip-changelog` and `dependencies` skip that check.
+  request cannot deliver is a parent: the agent cuts it into stories by the seven steps in
+  [`AGENTS.md`](../AGENTS.md), opens one sub-issue per story, and the parent stays open. The cut
+  is written out in
+  [`docs/github/configuration.md`](../docs/github/configuration.md#splitting-a-topic-into-stories).
+  CI rejects a pull request that does not close exactly one adopted issue with no open
+  sub-issues. `skip-changelog` and `dependencies` skip that check.
 - **A decision later work builds on goes through an RFC when an issue asks for it,** before the
   code that depends on it. A product document may be cited. It does not raise the requirement.
   See below.
@@ -118,9 +122,10 @@ corrected. A bug fix or a refactor that keeps behaviour needs none.
 
 These live in GitHub's settings, not in files, and are set once by the owner:
 
-- **Branch protection on `main`**: require a pull request, require the `ci` status check, allow
-  squash merging only, block force pushes and deletion. No approving review is required while
-  there is one maintainer.
+- **Ruleset `project-main` on `main`**: a pull request, one approving review, the `ci` check, and
+  squash merges only. Force pushes and deletion are blocked. Administrators do not bypass it.
+  The live settings, the project board, and the workflow triggers are in
+  [`docs/github/configuration.md`](../docs/github/configuration.md).
 - **Labels** the forms, Dependabot and CI apply: `type:feature`, `type:bug`, `type:data`,
   `type:investigation`, `type:chore`, `type:docs`, `dependencies`, `skip-changelog`. A form only
   applies a label that already exists.
