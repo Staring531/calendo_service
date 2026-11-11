@@ -3,6 +3,12 @@ description: "Something Calendo should be able to answer or do. / Calendo 应当
 title: "[feature] "
 labels: ["type:feature"]
 body:
+  - type: markdown
+    attributes:
+      value: |
+        A request one pull request cannot deliver becomes a parent. The agent may open one sub-issue per story. Work starts when the owner opens the issue, or comments a line `Adopted` on an issue the agent opened. The parent stays open.
+        一个 pull request 做不完的请求成为父 issue。Agent 可以为每个 story 开一条子 issue。所有者开出 issue，或在 Agent 开出的 issue 上评论单独一行 `Adopted`，工作才能开始。父 issue 保持打开。
+
   - type: textarea
     id: problem
     attributes:
@@ -34,7 +40,7 @@ body:
       placeholder: |
         - 2025-10-11 in CN is adjusted_workday (source: 国务院办公厅 2025 年放假通知)
     validations:
-      required: false
+      required: true
 
   - type: textarea
     id: alternatives

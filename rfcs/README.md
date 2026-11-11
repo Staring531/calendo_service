@@ -4,8 +4,8 @@
 
 One design decision per document, as an English/Chinese pair: `CRFC-NNNN-<slug>.md` and
 `CRFC-NNNN-<slug>.zh.md`. The open questions in the
-[product background](../docs/product/calendo-mvp.zh.md) (待决问题) are where the first ones come
-from.
+[product background](../docs/product/calendo-mvp.zh.md) (待决问题) are background. An issue raises
+the work of drafting an RFC; the issue may cite one of those questions.
 
 ## Conventions
 
@@ -36,3 +36,4 @@ Take the next number after the last row.
 
 | Document | Title | Status |
 | --- | --- | --- |
+| [CRFC-0001](CRFC-0001-requirement-flow.md) | From direction to workable issue | draft |

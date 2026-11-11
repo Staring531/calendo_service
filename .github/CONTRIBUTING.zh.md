@@ -13,7 +13,7 @@
 
 ```sh
 uv sync                     # 按锁文件安装环境到 .venv/
-sh scripts/check.sh         # 在本机跑一遍 CI 的完整检查链
+sh scripts/check.sh         # 格式、类型检查和测试；CI 另外还会构建，并在 pull request 上检查记录
 
 uv run ruff format .        # 格式化
 uv run ruff check --fix .   # lint
@@ -34,7 +34,7 @@ uv run pytest tests/tooling/test_check_changelog.py   # 单个文件
 | `changelog/` | 每个改动一对条目，按版本分组。格式见 `changelog/README.zh.md`。 |
 | `rfcs/` | 设计 RFC，每个决定一对中英文文档。 |
 | `docs/product/` | 产品背景：Calendo 做什么，以及起步时留下的待决问题。 |
-| `.agents/skills/calendo-dev/` | 编码 Agent 需要知道、从外部又容易弄错的约定。`.claude` 链接到 `.agents`。 |
+| `.agents/skills/calendo-dev/` | 编码 Agent 的索引，指向根目录 `AGENTS.md` 和各层嵌套的 `AGENTS.md`。`.claude` 链接到 `.agents`。 |
 
 ## 质量关卡
 
@@ -59,7 +59,8 @@ uv run pytest tests/tooling/test_check_changelog.py   # 单个文件
 - **每个改动都附一对中英文变更日志条目**：在做出改动的同一个 pull request 中新增 `changelog/unreleased/YYYY-MM-DD-<slug>.md` 及其 `.zh.md`。格式见 [`changelog/README.zh.md`](../changelog/README.zh.md)，CI 会检查。没有人会读到或运行到的改动（注释里的错别字、工具升级）改为打上 `skip-changelog` 标签。
 - **日期事实都有来源。** Calendo 的回答来自固定版本的 [holidays](https://github.com/vacanza/holidays)，以及提交在仓库中的夹具；每份夹具都附有核对所依据的官方通知链接。日期从不由模型提供，服务运行时不发起任何网络调用。
 - **一次数据变更就是一个 pull request**：夹具、来源链接、读取它的测试，以及一条 `Type: data` 的变更日志条目一起合入。升级 `holidays` 属于数据变更，所以 Dependabot 不碰它。
-- **产品文档中留作待决的决定，先走 RFC**，再写依赖它的代码。见下文。
+- **需求就是本仓库的一条 GitHub issue。** 由所有者开出。Agent 开出的 issue，要所有者评论单独一行 `Adopted` 才算数。一个 pull request 做不完的请求是父 issue：Agent 为每个 story 开一条子 issue，父 issue 保持打开。CI 拒绝没有关闭恰好一条已采纳、且没有未关闭子 issue 的 pull request。`skip-changelog` 和 `dependencies` 跳过这项检查。
+- **后续工作要依赖的决定，由一条 issue 提出后先走 RFC**，再写依赖它的代码。产品文档可以被引用，它本身不提出需求。见下文。
 - **已推送的 tag 永不移动。** 发布准备单独走一个 pull request，顺序见[发布参考](../.agents/skills/calendo-dev/reference/release.md)。
 
 ## 设计 RFC

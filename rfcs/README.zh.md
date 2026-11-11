@@ -2,7 +2,7 @@
 
 [English](README.md)
 
-一份文档一个设计决定，成对出现：`CRFC-NNNN-<slug>.md` 与 `CRFC-NNNN-<slug>.zh.md`。[产品背景](../docs/product/calendo-mvp.zh.md)里的待决问题，就是最初几份 RFC 的来源。
+一份文档一个设计决定，成对出现：`CRFC-NNNN-<slug>.md` 与 `CRFC-NNNN-<slug>.zh.md`。[产品背景](../docs/product/calendo-mvp.zh.md)里的待决问题是背景。起草 RFC 的工作由一条 issue 提出，这条 issue 可以引用其中某个问题。
 
 ## 约定
 
@@ -23,3 +23,4 @@
 
 | 文档 | 标题 | 状态 |
 | --- | --- | --- |
+| [CRFC-0001](CRFC-0001-requirement-flow.zh.md) | 从方向到可开工的 issue | draft |

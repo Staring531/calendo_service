@@ -1,8 +1,7 @@
 # The changelog contract
 
-Loaded on demand from `SKILL.md`, which states the rule: every change ships a bilingual entry pair
-in `changelog/unreleased/`, inside the pull request that makes it. `changelog/README.md` is the
-full format; read it rather than copying a neighbouring entry.
+The rules an agent follows are in [`changelog/AGENTS.md`](../../../../changelog/AGENTS.md), and
+the format is `changelog/README.md`. This page is the longer checklist.
 
 ## The pair
 

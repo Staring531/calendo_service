@@ -1,7 +1,8 @@
 # Preparing a release
 
-Loaded on demand from `SKILL.md`. A release is the owner's call: prepare it when asked, and do not
-push the tag yourself unless the owner says to.
+Who may cut a release, and that a pushed tag is never moved, is in
+[`.github/AGENTS.md`](../../../../.github/AGENTS.md). A release is the owner's call: prepare it
+when asked, and do not push the tag unless the owner says to.
 
 ## The one rule
 

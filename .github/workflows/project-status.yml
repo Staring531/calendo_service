@@ -1,0 +1,42 @@
+# Move the project card from the event. cursor-cf cannot edit the project.
+# PROJECT_TOKEN is a fine-grained PAT of Staring531 with access to the user project.
+# A missing secret warns and exits 0; this workflow is not a required check.
+name: Project status
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  issue_comment:
+    types: [created]
+  issues:
+    types: [closed]
+
+permissions:
+  contents: read
+  pull-requests: read
+  issues: read
+
+jobs:
+  move:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: ./.github/actions/setup
+      - name: Changed files
+        if: github.event_name == 'pull_request'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api --paginate \
+            "repos/${GITHUB_REPOSITORY}/pulls/${{ github.event.pull_request.number }}/files" \
+            --jq '.[].filename' > "$RUNNER_TEMP/files.txt"
+      - name: Move the card
+        env:
+          PROJECT_TOKEN: ${{ secrets.PROJECT_TOKEN }}
+        run: |
+          files=""
+          if [ -f "$RUNNER_TEMP/files.txt" ]; then
+            files="$(cat "$RUNNER_TEMP/files.txt")"
+          fi
+          CHANGED_FILES="$files" uv run python scripts/project_status.py

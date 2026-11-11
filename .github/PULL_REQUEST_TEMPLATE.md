@@ -1,9 +1,10 @@
 ## What this changes
 
 <!--
-One or two sentences: what the change does and why it was needed. Add `Closes <full issue URL>`
-when it answers an issue. Issues and pull requests share one numbering space, so a bare `#N` does
-not say which one you mean.
+One or two sentences: what the change does and why it was needed. Add
+`Closes https://github.com/Staring531/calendo_service/issues/N`.
+The issue was opened by the owner, or the owner commented a line `Adopted`.
+It has no open sub-issues. `skip-changelog` and `dependencies` skip this.
 -->
 
 ## Verification
